@@ -64,11 +64,29 @@ export function barycentricToTriangle(base) {
 }
 
 export function getPyramidPoint(result) {
-  const z = result.isCringeRelevant ? result.percentages.cringe / 100 : 0;
+  const vertices = {
+    fotzig: { x: 0, y: 1.39, z: 0 },
+    atzig: { x: -1.2, y: -0.69, z: 0 },
+    mausig: { x: 1.2, y: -0.69, z: 0 },
+    cringe: { x: 0, y: 0, z: 1.95 },
+  };
+  const cringeShare = result.isCringeRelevant
+    ? (result.percentages.cringe ?? 0) / 100
+    : 0;
+  const baseShare = 1 - cringeShare;
+
   return {
-    x: result.base.mausig - result.base.atzig,
-    y: result.base.fotzig * 1.1 - 0.28,
-    z: z * 1.5,
+    x:
+      baseShare *
+      (result.base.fotzig * vertices.fotzig.x +
+        result.base.atzig * vertices.atzig.x +
+        result.base.mausig * vertices.mausig.x),
+    y:
+      baseShare *
+      (result.base.fotzig * vertices.fotzig.y +
+        result.base.atzig * vertices.atzig.y +
+        result.base.mausig * vertices.mausig.y),
+    z: cringeShare * vertices.cringe.z,
   };
 }
 

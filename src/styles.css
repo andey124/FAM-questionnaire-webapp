@@ -286,6 +286,22 @@ h2 {
   background: rgba(184, 222, 216, 0.48);
 }
 
+.score-row-fotzig i {
+  background: rgba(247, 186, 200, 0.5);
+}
+
+.score-row-atzig i {
+  background: rgba(184, 222, 216, 0.52);
+}
+
+.score-row-mausig i {
+  background: rgba(246, 220, 158, 0.52);
+}
+
+.score-row-cringe i {
+  background: rgba(215, 202, 246, 0.56);
+}
+
 .visual-panel {
   display: grid;
   align-content: center;
@@ -303,7 +319,7 @@ h2 {
 .triangle-visual,
 .pyramid-visual {
   width: 100%;
-  min-height: 420px;
+  min-height: 500px;
   touch-action: none;
 }
 
@@ -311,6 +327,28 @@ h2 {
   fill: rgba(255, 255, 255, 0.58);
   stroke: rgba(37, 33, 38, 0.18);
   stroke-width: 1;
+}
+
+.triangle-zone {
+  mix-blend-mode: multiply;
+  opacity: 0.48;
+}
+
+.triangle-zone-fotzig {
+  fill: rgba(247, 186, 200, 0.48);
+}
+
+.triangle-zone-atzig {
+  fill: rgba(184, 222, 216, 0.48);
+}
+
+.triangle-zone-mausig {
+  fill: rgba(246, 220, 158, 0.5);
+}
+
+.triangle-glow {
+  mix-blend-mode: multiply;
+  pointer-events: none;
 }
 
 .triangle-guide {
@@ -337,9 +375,41 @@ h2 {
   font-weight: 900;
 }
 
+.pyramid-label-fotzig {
+  fill: #7b2d46;
+}
+
+.pyramid-label-atzig {
+  fill: #245f58;
+}
+
+.pyramid-label-mausig {
+  fill: #705000;
+}
+
+.pyramid-label-cringe {
+  fill: #594394;
+}
+
 .pyramid-face {
   stroke: rgba(37, 33, 38, 0.18);
   stroke-width: 1;
+}
+
+.pyramid-face-fotzig {
+  fill: rgba(247, 186, 200, 0.66);
+}
+
+.pyramid-face-atzig {
+  fill: rgba(184, 222, 216, 0.64);
+}
+
+.pyramid-face-mausig {
+  fill: rgba(246, 220, 158, 0.64);
+}
+
+.pyramid-face-base {
+  fill: rgba(255, 255, 255, 0.56);
 }
 
 .pyramid-edge {
@@ -380,6 +450,6 @@ h2 {
 
   .triangle-visual,
   .pyramid-visual {
-    min-height: 320px;
+    min-height: 360px;
   }
 }

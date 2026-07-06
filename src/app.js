@@ -6,6 +6,13 @@ import {
 
 const app = document.querySelector("#app");
 
+const poleColors = {
+  fotzig: "#f7bac8",
+  atzig: "#b8ded8",
+  mausig: "#f6dc9e",
+  cringe: "#d7caf6",
+};
+
 const state = {
   screen: "intro",
   currentQuestion: 0,
@@ -128,10 +135,10 @@ function renderResult() {
         <h1>${result.title}</h1>
         <p class="lead">${result.sentence}</p>
         <div class="score-list">
-          ${scoreRow("Fotzig", result.percentages.fotzig)}
-          ${scoreRow("Atzig", result.percentages.atzig)}
-          ${scoreRow("Mausig", result.percentages.mausig)}
-          ${result.isCringeRelevant ? scoreRow("Cringe", result.percentages.cringe) : ""}
+          ${scoreRow("Fotzig", result.percentages.fotzig, "fotzig")}
+          ${scoreRow("Atzig", result.percentages.atzig, "atzig")}
+          ${scoreRow("Mausig", result.percentages.mausig, "mausig")}
+          ${result.isCringeRelevant ? scoreRow("Cringe", result.percentages.cringe, "cringe") : ""}
         </div>
         <div class="nav-row left">
           <button class="ghost-button" data-action="restart">Neu kalibrieren</button>
@@ -167,9 +174,9 @@ function renderResult() {
   }
 }
 
-function scoreRow(label, value) {
+function scoreRow(label, value, tone) {
   return `
-    <div class="score-row">
+    <div class="score-row score-row-${tone}">
       <span>${label}</span>
       <strong>${value}%</strong>
       <i style="width: ${value}%"></i>
@@ -178,10 +185,11 @@ function scoreRow(label, value) {
 }
 
 function triangleTemplate(result) {
+  const center = { x: 280, y: 278.67 };
   const vertices = {
-    fotzig: { x: 280, y: 58 },
-    atzig: { x: 82, y: 374 },
-    mausig: { x: 478, y: 374 },
+    fotzig: { x: 280, y: 82 },
+    atzig: { x: 74, y: 439 },
+    mausig: { x: 486, y: 439 },
   };
   const dot = {
     x:
@@ -195,11 +203,34 @@ function triangleTemplate(result) {
   };
 
   return `
-    <svg class="triangle-visual" viewBox="0 0 560 460" role="img" aria-label="FAM-Dreieck">
+    <svg class="triangle-visual" viewBox="0 0 560 520" role="img" aria-label="FAM-Dreieck">
+      <defs>
+        <clipPath id="triangle-clip">
+          <polygon points="${vertices.fotzig.x},${vertices.fotzig.y} ${vertices.atzig.x},${vertices.atzig.y} ${vertices.mausig.x},${vertices.mausig.y}"></polygon>
+        </clipPath>
+        <radialGradient id="fotzig-glow" cx="50%" cy="18%" r="72%">
+          <stop offset="0%" stop-color="${poleColors.fotzig}" stop-opacity="0.62"></stop>
+          <stop offset="100%" stop-color="${poleColors.fotzig}" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="atzig-glow" cx="18%" cy="84%" r="72%">
+          <stop offset="0%" stop-color="${poleColors.atzig}" stop-opacity="0.56"></stop>
+          <stop offset="100%" stop-color="${poleColors.atzig}" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="mausig-glow" cx="82%" cy="84%" r="72%">
+          <stop offset="0%" stop-color="${poleColors.mausig}" stop-opacity="0.58"></stop>
+          <stop offset="100%" stop-color="${poleColors.mausig}" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
       <polygon
         points="${vertices.fotzig.x},${vertices.fotzig.y} ${vertices.atzig.x},${vertices.atzig.y} ${vertices.mausig.x},${vertices.mausig.y}"
         class="triangle-face"
       ></polygon>
+      <polygon points="${vertices.fotzig.x},${vertices.fotzig.y} ${vertices.atzig.x},${vertices.atzig.y} ${center.x},${center.y}" class="triangle-zone triangle-zone-fotzig"></polygon>
+      <polygon points="${vertices.atzig.x},${vertices.atzig.y} ${vertices.mausig.x},${vertices.mausig.y} ${center.x},${center.y}" class="triangle-zone triangle-zone-atzig"></polygon>
+      <polygon points="${vertices.mausig.x},${vertices.mausig.y} ${vertices.fotzig.x},${vertices.fotzig.y} ${center.x},${center.y}" class="triangle-zone triangle-zone-mausig"></polygon>
+      <rect x="36" y="46" width="488" height="430" fill="url(#fotzig-glow)" class="triangle-glow" clip-path="url(#triangle-clip)"></rect>
+      <rect x="36" y="46" width="488" height="430" fill="url(#atzig-glow)" class="triangle-glow" clip-path="url(#triangle-clip)"></rect>
+      <rect x="36" y="46" width="488" height="430" fill="url(#mausig-glow)" class="triangle-glow" clip-path="url(#triangle-clip)"></rect>
       <line x1="${vertices.fotzig.x}" y1="${vertices.fotzig.y}" x2="${dot.x}" y2="${dot.y}" class="triangle-guide"></line>
       <line x1="${vertices.atzig.x}" y1="${vertices.atzig.y}" x2="${dot.x}" y2="${dot.y}" class="triangle-guide"></line>
       <line x1="${vertices.mausig.x}" y1="${vertices.mausig.y}" x2="${dot.x}" y2="${dot.y}" class="triangle-guide"></line>
@@ -207,16 +238,16 @@ function triangleTemplate(result) {
       <line x1="${vertices.atzig.x}" y1="${vertices.atzig.y}" x2="${vertices.mausig.x}" y2="${vertices.mausig.y}" class="triangle-edge"></line>
       <line x1="${vertices.mausig.x}" y1="${vertices.mausig.y}" x2="${vertices.fotzig.x}" y2="${vertices.fotzig.y}" class="triangle-edge"></line>
       <circle cx="${dot.x}" cy="${dot.y}" r="9" class="result-dot"></circle>
-      ${label("Fotzig", { x: vertices.fotzig.x, y: vertices.fotzig.y - 12 })}
-      ${label("Atzig", { x: vertices.atzig.x, y: vertices.atzig.y + 42 })}
-      ${label("Mausig", { x: vertices.mausig.x, y: vertices.mausig.y + 42 })}
+      ${label("Fotzig", { x: vertices.fotzig.x, y: vertices.fotzig.y - 18 }, "fotzig")}
+      ${label("Atzig", { x: vertices.atzig.x, y: vertices.atzig.y + 40 }, "atzig")}
+      ${label("Mausig", { x: vertices.mausig.x, y: vertices.mausig.y + 40 }, "mausig")}
     </svg>
   `;
 }
 
 function pyramidTemplate() {
   return `
-    <svg class="pyramid-visual" viewBox="0 0 560 460" role="img" aria-label="FAM-Pyramide">
+    <svg class="pyramid-visual" viewBox="0 0 560 520" role="img" aria-label="FAM-Pyramide">
       <g data-pyramid></g>
     </svg>
   `;
@@ -230,30 +261,38 @@ function mountPyramid(result) {
   let last = { x: 0, y: 0 };
 
   const vertices = {
-    fotzig: { x: 0, y: 1.1, z: 0 },
-    atzig: { x: -1.1, y: -0.72, z: 0 },
-    mausig: { x: 1.1, y: -0.72, z: 0 },
-    cringe: { x: 0, y: 0.02, z: 1.65 },
+    fotzig: { x: 0, y: 1.39, z: 0 },
+    atzig: { x: -1.2, y: -0.69, z: 0 },
+    mausig: { x: 1.2, y: -0.69, z: 0 },
+    cringe: { x: 0, y: 0, z: 1.95 },
   };
 
   function draw() {
     if (!svg.isConnected) return;
-    const projected = Object.fromEntries(
+    let projected = Object.fromEntries(
       Object.entries(vertices).map(([key, value]) => [key, project(value)]),
     );
-    const dot = project(resultPoint);
+    let dot = project(resultPoint);
+    const fitted = fitProjection({ ...projected, dot });
+    dot = fitted.dot;
+    projected = {
+      fotzig: fitted.fotzig,
+      atzig: fitted.atzig,
+      mausig: fitted.mausig,
+      cringe: fitted.cringe,
+    };
     const faces = [
-      ["fotzig", "atzig", "mausig", "rgba(255,255,255,0.58)"],
-      ["fotzig", "atzig", "cringe", "rgba(251, 185, 196, 0.62)"],
-      ["atzig", "mausig", "cringe", "rgba(184, 222, 216, 0.60)"],
-      ["mausig", "fotzig", "cringe", "rgba(247, 221, 155, 0.58)"],
+      ["fotzig", "atzig", "mausig", "rgba(255,255,255,0.54)", "base"],
+      ["fotzig", "atzig", "cringe", "rgba(247, 186, 200, 0.66)", "fotzig"],
+      ["atzig", "mausig", "cringe", "rgba(184, 222, 216, 0.64)", "atzig"],
+      ["mausig", "fotzig", "cringe", "rgba(246, 220, 158, 0.64)", "mausig"],
     ];
 
     layer.innerHTML = `
       ${faces
         .map((face) => {
-          const [a, b, c, color] = face;
-          return `<polygon points="${points(projected[a], projected[b], projected[c])}" fill="${color}" class="pyramid-face"></polygon>`;
+          const [a, b, c, color, tone] = face;
+          return `<polygon points="${points(projected[a], projected[b], projected[c])}" fill="${color}" class="pyramid-face pyramid-face-${tone}"></polygon>`;
         })
         .join("")}
       ${edge(projected.fotzig, projected.atzig)}
@@ -262,10 +301,10 @@ function mountPyramid(result) {
       ${edge(projected.cringe, projected.fotzig)}
       ${edge(projected.cringe, projected.atzig)}
       ${edge(projected.cringe, projected.mausig)}
-      ${label("Fotzig", projected.fotzig)}
-      ${label("Atzig", projected.atzig)}
-      ${label("Mausig", projected.mausig)}
-      ${label("Cringe", projected.cringe)}
+      ${label("Fotzig", projected.fotzig, "fotzig")}
+      ${label("Atzig", projected.atzig, "atzig")}
+      ${label("Mausig", projected.mausig, "mausig")}
+      ${label("Cringe", projected.cringe, "cringe")}
       <circle cx="${dot.x}" cy="${dot.y}" r="9" class="pyramid-dot"></circle>
     `;
   }
@@ -279,12 +318,37 @@ function mountPyramid(result) {
     const z1 = point.x * sinY + point.z * cosY;
     const y1 = point.y * cosX - z1 * sinX;
     const z2 = point.y * sinX + z1 * cosX;
-    const scale = 150 / (2.9 - z2);
+    const scale = 900 / (4.4 - z2);
 
     return {
       x: 280 + x1 * scale,
-      y: 230 - y1 * scale,
+      y: 276 - y1 * scale,
     };
+  }
+
+  function fitProjection(pointsMap) {
+    const values = Object.values(pointsMap);
+    const minX = Math.min(...values.map((point) => point.x));
+    const maxX = Math.max(...values.map((point) => point.x));
+    const minY = Math.min(...values.map((point) => point.y));
+    const maxY = Math.max(...values.map((point) => point.y));
+    const width = maxX - minX || 1;
+    const height = maxY - minY || 1;
+    const fit = Math.min(1, 470 / width, 430 / height);
+    const center = {
+      x: (minX + maxX) / 2,
+      y: (minY + maxY) / 2,
+    };
+
+    return Object.fromEntries(
+      Object.entries(pointsMap).map(([key, point]) => [
+        key,
+        {
+          x: 280 + (point.x - center.x) * fit,
+          y: 256 + (point.y - center.y) * fit,
+        },
+      ]),
+    );
   }
 
   svg.addEventListener("pointerdown", (event) => {
@@ -343,8 +407,8 @@ function edge(a, b) {
   return `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" class="pyramid-edge"></line>`;
 }
 
-function label(text, point) {
-  return `<text x="${point.x}" y="${point.y - 14}" text-anchor="middle" class="pyramid-label">${text}</text>`;
+function label(text, point, tone = "") {
+  return `<text x="${point.x}" y="${point.y - 14}" text-anchor="middle" class="pyramid-label pyramid-label-${tone}">${text}</text>`;
 }
 
 render();
