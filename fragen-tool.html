@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FAM-Fragentool</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #2d2930;
+        --muted: #706874;
+        --line: #ded4dd;
+        --paper: #fffaf7;
+        --panel: rgba(255, 255, 255, 0.72);
+        --fotzig: #f7bac8;
+        --atzig: #b8ded8;
+        --mausig: #f6dc9e;
+        --cringe: #d7caf6;
+        --shadow: 0 18px 50px rgba(76, 58, 83, 0.16);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 9% 15%, rgba(247, 186, 200, 0.68), transparent 29%),
+          radial-gradient(circle at 84% 10%, rgba(184, 222, 216, 0.72), transparent 25%),
+          radial-gradient(circle at 78% 88%, rgba(215, 202, 246, 0.64), transparent 31%),
+          radial-gradient(circle at 18% 88%, rgba(246, 220, 158, 0.68), transparent 30%),
+          #fff6ef;
+      }
+
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        border: 0;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.48;
+      }
+
+      .page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 34px 0 44px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        margin-bottom: 24px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 10px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.2rem, 5vw, 4.8rem);
+        line-height: 0.94;
+      }
+
+      .lead {
+        max-width: 760px;
+        margin-bottom: 0;
+        color: #544b56;
+        font-size: 1.05rem;
+        line-height: 1.6;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .primary,
+      .secondary,
+      .danger,
+      .small-button {
+        min-height: 42px;
+        padding: 0 16px;
+        font-weight: 800;
+      }
+
+      .primary {
+        background: var(--ink);
+        color: white;
+        box-shadow: 0 10px 20px rgba(45, 41, 48, 0.18);
+      }
+
+      .secondary,
+      .small-button {
+        background: rgba(255, 255, 255, 0.78);
+        color: var(--ink);
+        border: 1px solid var(--line);
+      }
+
+      .danger {
+        background: #fff0f2;
+        color: #8b2940;
+        border: 1px solid #efbdc8;
+      }
+
+      .small-button {
+        min-height: 34px;
+        padding: 0 11px;
+        font-size: 0.9rem;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(330px, 0.44fr);
+        gap: 18px;
+        align-items: start;
+      }
+
+      .panel,
+      .question-card {
+        border: 1px solid rgba(222, 212, 221, 0.86);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(14px);
+      }
+
+      .question-card {
+        padding: 18px;
+        margin-bottom: 16px;
+      }
+
+      .question-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: start;
+        margin-bottom: 14px;
+      }
+
+      .question-title {
+        display: grid;
+        gap: 7px;
+      }
+
+      label {
+        display: grid;
+        gap: 7px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
+
+      textarea,
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.82);
+        color: var(--ink);
+        outline: 0;
+      }
+
+      textarea:focus,
+      input:focus {
+        border-color: #9d7899;
+        box-shadow: 0 0 0 3px rgba(215, 202, 246, 0.72);
+      }
+
+      textarea {
+        min-height: 76px;
+        padding: 12px;
+        resize: vertical;
+        line-height: 1.45;
+      }
+
+      input[type="text"] {
+        min-height: 42px;
+        padding: 0 12px;
+      }
+
+      input[type="number"] {
+        min-height: 38px;
+        padding: 0 8px;
+      }
+
+      .answers {
+        display: grid;
+        gap: 12px;
+      }
+
+      .answer-row {
+        display: grid;
+        grid-template-columns: minmax(210px, 1fr) repeat(4, minmax(62px, 78px)) auto;
+        gap: 9px;
+        align-items: end;
+        padding: 12px;
+        border: 1px dashed rgba(112, 104, 116, 0.34);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.46);
+      }
+
+      .score-label {
+        position: relative;
+      }
+
+      .score-label::before {
+        content: "";
+        position: absolute;
+        inset: 24px 8px auto auto;
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+      }
+
+      .score-label-fotzig::before {
+        background: var(--fotzig);
+      }
+
+      .score-label-atzig::before {
+        background: var(--atzig);
+      }
+
+      .score-label-mausig::before {
+        background: var(--mausig);
+      }
+
+      .score-label-cringe::before {
+        background: var(--cringe);
+      }
+
+      .panel {
+        position: sticky;
+        top: 16px;
+        padding: 16px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .stat {
+        padding: 12px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.64);
+        border: 1px solid var(--line);
+      }
+
+      .stat strong {
+        display: block;
+        font-size: 1.55rem;
+        line-height: 1;
+      }
+
+      .stat span,
+      .hint,
+      .error-list {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.45;
+      }
+
+      .error-list {
+        display: grid;
+        gap: 7px;
+        margin: 0 0 14px;
+        padding-left: 18px;
+      }
+
+      .preview {
+        width: 100%;
+        min-height: 360px;
+        margin-top: 12px;
+        padding: 12px;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(45, 41, 48, 0.92);
+        color: #fff9f5;
+        font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+        font-size: 0.78rem;
+        line-height: 1.48;
+        white-space: pre;
+      }
+
+      .empty {
+        padding: 26px;
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.46);
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .file-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+      }
+
+      @media (max-width: 900px) {
+        .hero,
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .toolbar {
+          justify-content: flex-start;
+        }
+
+        .panel {
+          position: static;
+        }
+
+        .answer-row {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .answer-text,
+        .answer-actions {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .page {
+          width: min(100% - 20px, 1180px);
+          padding-top: 22px;
+        }
+
+        .question-head {
+          grid-template-columns: 1fr;
+        }
+
+        .toolbar {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
+        .answer-row {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Institut für angewandte Itemproduktion</p>
+          <h1>FAM-Fragentool</h1>
+          <p class="lead">
+            Ein lokales Hilfsformular zur Erzeugung plausibel trockener Items.
+            Die exportierte JSON-Datei enthält Fragen, Antworten und Punktwerte für
+            Fotzig, Atzig, Mausig und Cringe.
+          </p>
+        </div>
+        <div class="toolbar">
+          <button class="secondary" type="button" data-action="import">JSON laden</button>
+          <button class="secondary" type="button" data-action="sample">Beispiel einfügen</button>
+          <button class="primary" type="button" data-action="add-question">Frage hinzufügen</button>
+          <input class="file-input" type="file" accept="application/json,.json" data-file-input>
+        </div>
+      </header>
+
+      <section class="layout">
+        <div>
+          <div id="questions"></div>
+        </div>
+
+        <aside class="panel" aria-label="Export">
+          <p class="eyebrow">Exportbefund</p>
+          <div class="stats">
+            <div class="stat">
+              <strong data-stat="questions">0</strong>
+              <span>Fragen</span>
+            </div>
+            <div class="stat">
+              <strong data-stat="answers">0</strong>
+              <span>Antworten</span>
+            </div>
+          </div>
+          <ul class="error-list" data-errors></ul>
+          <p class="hint">
+            Empfehlung: pro Antwort eine erkennbare Hauptdimension mit 2 bis 3 Punkten
+            setzen. Cringe kann als latente Beimischung verwendet werden.
+          </p>
+          <button class="primary" type="button" data-action="download">JSON herunterladen</button>
+          <pre class="preview" data-preview aria-label="JSON-Vorschau"></pre>
+        </aside>
+      </section>
+    </main>
+
+    <script>
+      const dimensions = ["fotzig", "atzig", "mausig", "cringe"];
+      const labels = {
+        fotzig: "Fotzig",
+        atzig: "Atzig",
+        mausig: "Mausig",
+        cringe: "Cringe",
+      };
+
+      const state = {
+        questions: [createQuestion()],
+      };
+
+      const questionsRoot = document.querySelector("#questions");
+      const fileInput = document.querySelector("[data-file-input]");
+
+      document.querySelector("[data-action='add-question']").addEventListener("click", () => {
+        state.questions.push(createQuestion());
+        render();
+      });
+
+      document.querySelector("[data-action='sample']").addEventListener("click", () => {
+        state.questions.push({
+          text: "Sie werden gefragt, ob Sie kurz helfen können.",
+          answers: [
+            answer("Ich helfe, aber stelle beiläufig die methodische Schwäche der Situation fest.", 2, 1, 0, 0),
+            answer("Ich helfe sofort, wirke dabei aber leicht genervt von der Prozesslage.", 0, 3, 0, 0),
+            answer("Ich frage, was genau gebraucht wird, und mache es möglichst angenehm.", 0, 0, 3, 0),
+            answer("Ich sage: 'Helfen ist hier vermutlich ein soziales Übergangsritual.'", 0, 0, 0, 3),
+          ],
+        });
+        render();
+      });
+
+      document.querySelector("[data-action='import']").addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", async () => {
+        const [file] = fileInput.files;
+        if (!file) return;
+        try {
+          const content = await file.text();
+          const parsed = JSON.parse(content);
+          const imported = Array.isArray(parsed) ? parsed : parsed.questions;
+          if (!Array.isArray(imported)) {
+            throw new Error("Die Datei enthält kein Fragen-Array.");
+          }
+          state.questions = imported.map(normalizeQuestion);
+          render();
+        } catch (error) {
+          alert(`Die JSON-Datei konnte nicht geladen werden: ${error.message}`);
+        } finally {
+          fileInput.value = "";
+        }
+      });
+
+      document.querySelector("[data-action='download']").addEventListener("click", () => {
+        const validation = validate();
+        if (validation.errors.length > 0) {
+          render();
+          return;
+        }
+
+        const json = JSON.stringify(createExport(), null, 2);
+        const blob = new Blob([json], { type: "application/json;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `fam-fragen-${new Date().toISOString().slice(0, 10)}.json`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      });
+
+      function createQuestion() {
+        return {
+          text: "",
+          answers: [
+            answer("", 3, 0, 0, 0),
+            answer("", 0, 3, 0, 0),
+            answer("", 0, 0, 3, 0),
+            answer("", 0, 0, 0, 3),
+          ],
+        };
+      }
+
+      function answer(text, fotzig, atzig, mausig, cringe) {
+        return { text, scores: { fotzig, atzig, mausig, cringe } };
+      }
+
+      function normalizeQuestion(question) {
+        return {
+          text: String(question.text ?? ""),
+          answers: Array.isArray(question.answers)
+            ? question.answers.map((item) =>
+                answer(
+                  String(item.text ?? ""),
+                  numberScore(item.scores?.fotzig),
+                  numberScore(item.scores?.atzig),
+                  numberScore(item.scores?.mausig),
+                  numberScore(item.scores?.cringe),
+                ),
+              )
+            : [],
+        };
+      }
+
+      function numberScore(value) {
+        const number = Number(value);
+        return Number.isFinite(number) ? Math.max(0, Math.min(9, Math.round(number))) : 0;
+      }
+
+      function render() {
+        questionsRoot.innerHTML = state.questions.length
+          ? state.questions.map(questionTemplate).join("")
+          : `<div class="empty">Noch keine Fragen angelegt.</div>`;
+
+        questionsRoot.querySelectorAll("[data-question]").forEach((card) => {
+          const questionIndex = Number(card.dataset.question);
+
+          card.querySelector("[data-field='question-text']").addEventListener("input", (event) => {
+            state.questions[questionIndex].text = event.target.value;
+            updateExportPanel();
+          });
+
+          card.querySelector("[data-action='remove-question']").addEventListener("click", () => {
+            state.questions.splice(questionIndex, 1);
+            render();
+          });
+
+          card.querySelector("[data-action='add-answer']").addEventListener("click", () => {
+            state.questions[questionIndex].answers.push(answer("", 0, 0, 0, 0));
+            render();
+          });
+
+          card.querySelectorAll("[data-answer]").forEach((row) => {
+            const answerIndex = Number(row.dataset.answer);
+
+            row.querySelector("[data-field='answer-text']").addEventListener("input", (event) => {
+              state.questions[questionIndex].answers[answerIndex].text = event.target.value;
+              updateExportPanel();
+            });
+
+            row.querySelectorAll("[data-score]").forEach((input) => {
+              input.addEventListener("input", (event) => {
+                const dimension = event.target.dataset.score;
+                state.questions[questionIndex].answers[answerIndex].scores[dimension] =
+                  numberScore(event.target.value);
+                updateExportPanel();
+              });
+            });
+
+            row.querySelector("[data-action='remove-answer']").addEventListener("click", () => {
+              state.questions[questionIndex].answers.splice(answerIndex, 1);
+              render();
+            });
+          });
+        });
+
+        updateExportPanel();
+      }
+
+      function questionTemplate(question, questionIndex) {
+        return `
+          <article class="question-card" data-question="${questionIndex}">
+            <div class="question-head">
+              <label class="question-title">
+                Frage ${questionIndex + 1}
+                <textarea data-field="question-text" placeholder="Situationsbeschreibung eintragen">${escapeHtml(question.text)}</textarea>
+              </label>
+              <button class="danger" type="button" data-action="remove-question">Frage entfernen</button>
+            </div>
+            <div class="answers">
+              ${question.answers.map((item, answerIndex) => answerTemplate(item, answerIndex)).join("")}
+            </div>
+            <p>
+              <button class="small-button" type="button" data-action="add-answer">Antwort hinzufügen</button>
+            </p>
+          </article>
+        `;
+      }
+
+      function answerTemplate(item, answerIndex) {
+        return `
+          <div class="answer-row" data-answer="${answerIndex}">
+            <label class="answer-text">
+              Antwort ${String.fromCharCode(65 + answerIndex)}
+              <input type="text" data-field="answer-text" value="${escapeAttribute(item.text)}" placeholder="Antworttext">
+            </label>
+            ${dimensions
+              .map(
+                (dimension) => `
+                  <label class="score-label score-label-${dimension}">
+                    ${labels[dimension]}
+                    <input type="number" min="0" max="9" step="1" data-score="${dimension}" value="${item.scores[dimension]}">
+                  </label>
+                `,
+              )
+              .join("")}
+            <div class="answer-actions">
+              <button class="small-button" type="button" data-action="remove-answer">Entfernen</button>
+            </div>
+          </div>
+        `;
+      }
+
+      function createExport() {
+        return {
+          schemaVersion: 1,
+          generatedBy: "FAM-Fragentool",
+          generatedAt: new Date().toISOString(),
+          questions: state.questions.map((question) => ({
+            text: question.text.trim(),
+            answers: question.answers.map((item) => ({
+              text: item.text.trim(),
+              scores: Object.fromEntries(
+                dimensions.map((dimension) => [dimension, numberScore(item.scores[dimension])]),
+              ),
+            })),
+          })),
+        };
+      }
+
+      function validate() {
+        const errors = [];
+
+        if (state.questions.length === 0) {
+          errors.push("Mindestens eine Frage ist erforderlich.");
+        }
+
+        state.questions.forEach((question, questionIndex) => {
+          if (!question.text.trim()) {
+            errors.push(`Frage ${questionIndex + 1}: Der Fragetext fehlt.`);
+          }
+
+          if (question.answers.length < 2) {
+            errors.push(`Frage ${questionIndex + 1}: Mindestens zwei Antworten sind erforderlich.`);
+          }
+
+          question.answers.forEach((item, answerIndex) => {
+            const label = `${questionIndex + 1}${String.fromCharCode(65 + answerIndex)}`;
+            if (!item.text.trim()) {
+              errors.push(`Antwort ${label}: Der Antworttext fehlt.`);
+            }
+            const total = dimensions.reduce((sum, dimension) => sum + numberScore(item.scores[dimension]), 0);
+            if (total === 0) {
+              errors.push(`Antwort ${label}: Mindestens ein Punktwert muss größer als 0 sein.`);
+            }
+          });
+        });
+
+        return { errors };
+      }
+
+      function updateExportPanel() {
+        const validation = validate();
+        const exportObject = createExport();
+        const answerCount = state.questions.reduce((sum, question) => sum + question.answers.length, 0);
+
+        document.querySelector("[data-stat='questions']").textContent = state.questions.length;
+        document.querySelector("[data-stat='answers']").textContent = answerCount;
+        document.querySelector("[data-errors]").innerHTML = validation.errors
+          .map((error) => `<li>${escapeHtml(error)}</li>`)
+          .join("");
+        document.querySelector("[data-preview]").textContent = JSON.stringify(exportObject, null, 2);
+        document.querySelector("[data-action='download']").disabled = validation.errors.length > 0;
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
+      }
+
+      function escapeAttribute(value) {
+        return escapeHtml(value).replaceAll('"', "&quot;");
+      }
+
+      render();
+    </script>
+  </body>
+</html>

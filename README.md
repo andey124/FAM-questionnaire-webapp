@@ -43,6 +43,31 @@ Die Auswertung, Schwellenlogik und Ergebnistexte liegen in:
 src/scoring.js
 ```
 
+## Fragen erstellen
+
+Für externe Vorschläge gibt es ein separates Zero-Setup-Tool:
+
+```txt
+fragen-tool.html
+```
+
+Die Datei kann direkt im Browser geöffnet werden. Dort lassen sich beliebig viele
+Fragen und Antworten anlegen, als JSON prüfen und herunterladen. Die exportierte Datei
+enthält Metadaten und ein `questions`-Array im gleichen Grundformat wie der interne
+Fragenkatalog:
+
+```js
+{
+  text: "Situationsbeschreibung",
+  answers: [
+    {
+      text: "Antworttext",
+      scores: { fotzig: 0, atzig: 0, mausig: 0, cringe: 0 }
+    }
+  ]
+}
+```
+
 Die aktuelle Schwelle liegt bei 20 Prozent. Werte darunter werden proportional auf Fotzig, Atzig und Mausig umgelegt, sodass die sichtbaren Werte immer 100 Prozent ergeben.
 
 ## Kodierung
