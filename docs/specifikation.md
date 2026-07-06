@@ -1,0 +1,113 @@
+# Spezifikation: Fotzig Atzig Mausig
+
+## Produktidee
+
+Die Anwendung ist ein kurzer, deutschsprachiger Fragebogen zur Einordnung in der
+Dreiecksskala **Fotzig / Atzig / Mausig**. Der Ton ist semi-wissenschaftlich:
+trocken, beobachtend und formal genug, dass die Absurditaet nicht sofort als reiner
+Meme-Test wirkt.
+
+Neben den drei sichtbaren Basisdimensionen gibt es eine latente vierte Dimension:
+**Cringe**. Sie wird nicht als normale Ecke des Dreiecks behandelt, sondern als
+Tiefenachse. Erst wenn Cringe den definierten Puffer ueberschreitet, wird die
+Visualisierung dreidimensional.
+
+## Zielgruppe und Nutzung
+
+- Nutzer:innen beantworten 12 Situationen.
+- Pro Situation wird genau eine Antwort gewaehlt.
+- Nach Abschluss erscheint ein Ergebnis mit Prozentwerten, Visualisierung und einem
+  Ergebnissatz.
+- Es gibt vorerst keine Speicherung, kein Teilen und kein Tracking.
+
+## Dimensionen
+
+### Fotzig
+
+Selbstbewusst, scharf konturiert, leicht herrisch, mit klarer Wirkungskontrolle.
+
+### Atzig
+
+Kantig, direkt, genervt von Ineffizienz und sozialer Unklarheit.
+
+### Mausig
+
+Weich, sozial verbindend, vorsichtig, temperaturbewusst.
+
+### Cringe
+
+Latente Tiefenkomponente. Sie beschreibt performative Selbstbeobachtung,
+ueberdeutliche Metakommunikation oder soziale Selbstinszenierung.
+
+## Scoring
+
+Jede Antwort traegt Punkte auf vier Dimensionen:
+
+```js
+{ fotzig: 0, atzig: 0, mausig: 0, cringe: 0 }
+```
+
+Die Basisposition im Dreieck wird nur aus Fotzig, Atzig und Mausig berechnet. Cringe
+wird separat normalisiert.
+
+Aktuelle Schwelle:
+
+```txt
+Cringe >= 20 Prozent
+```
+
+Unterhalb dieser Schwelle bleibt das Ergebnis im flachen 2D-Dreieck. Ab der Schwelle
+wird die 3D-Pyramide aktiviert.
+
+## Ergebnislogik
+
+Das Ergebnis besteht aus:
+
+- Titel aus staerkster und zweitstaerkster Basisdimension
+- Prozentwerte fuer alle vier Dimensionen
+- Visualisierung
+- einem Ergebnissatz
+
+Beispiele:
+
+```txt
+Fotzig-Mausig im flachen Modell
+```
+
+```txt
+Atzig-Fotzig mit latenter Cringe-Aktivierung
+```
+
+## Visualisierung
+
+### 2D
+
+Ein SVG-Dreieck mit den Eckpunkten:
+
+- Fotzig oben
+- Atzig unten links
+- Mausig unten rechts
+
+Der Ergebnispunkt wird aus baryzentrischen Anteilen berechnet.
+
+### 3D
+
+Bei modellrelevantem Cringe wird eine Pyramide gezeigt:
+
+- Grundflaeche: Fotzig / Atzig / Mausig
+- Spitze: Cringe
+- Ergebnis: Punkt im Volumen
+
+Die Pyramide ist per Maus oder Touch rotierbar. Technisch wird sie aktuell ohne externe
+3D-Bibliothek ueber eine kleine JavaScript-Projektion in SVG gezeichnet.
+
+## Bewusste Entscheidungen fuer Version 1
+
+- Komplett deutsch.
+- Eine Antwort pro Frage.
+- Eine Frage pro Screen.
+- Kein Backend.
+- Kein Build-Schritt.
+- Kein Teilen/Speichern.
+- Fragenkatalog direkt im Code editierbar.
+
