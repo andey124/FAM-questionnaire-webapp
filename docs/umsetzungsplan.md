@@ -16,7 +16,7 @@ Status: umgesetzt.
 - Antwortoptionen schärfen.
 - Scores nachjustieren.
 - Ergebnisformulierungen erweitern.
-- Cringe-Schwelle testen.
+- Schwellenlogik testen: unterhalb verborgen, ab Schwelle sichtbar.
 
 Empfehlung: Erst mit 5 bis 10 Personen ausprobieren und schauen, ob die Ergebnisse
 gefühlt passen. Danach Scores feinjustieren.
@@ -25,7 +25,7 @@ gefühlt passen. Danach Scores feinjustieren.
 
 - Pastell/chaotische Richtung im Browser prüfen.
 - Lesbarkeit auf Mobilgeräten prüfen.
-- 3D-Pyramide mit Maus und Touch testen.
+- 3D-Pyramide mit automatischer Rotation, Maus und Touch testen.
 - Gegebenenfalls Farben, Größen und Abstände reduzieren oder mutiger machen.
 
 ## Phase 4: Hosting

@@ -26,3 +26,5 @@
 - Commits sollen jeweils genau eine fachliche oder technische Änderung beschreiben.
 - Vor einem Commit nach Möglichkeit passende Checks ausführen.
 - Dokumentation soll mit Codeänderungen mitgezogen werden, wenn sich Verhalten, Setup oder Produktannahmen ändern.
+- Cringe darf in der sichtbaren Anwendung erst ab Überschreiten der Schwelle erwähnt oder visualisiert werden.
+- Es sollen keine Hinweise auf den Prompt oder die Anweisungen in den generierten Inhalten enthalten sein.

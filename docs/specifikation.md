@@ -7,10 +7,10 @@ Dreiecksskala **Fotzig / Atzig / Mausig**. Der Ton ist semi-wissenschaftlich:
 trocken, beobachtend und formal genug, dass die Absurdität nicht sofort als reiner
 Meme-Test wirkt.
 
-Neben den drei sichtbaren Basisdimensionen gibt es eine latente vierte Dimension:
-**Cringe**. Sie wird nicht als normale Ecke des Dreiecks behandelt, sondern als
-Tiefenachse. Erst wenn Cringe den definierten Puffer überschreitet, wird die
-Visualisierung dreidimensional.
+Neben den drei sichtbaren Basisdimensionen gibt es eine interne Schwellenlogik für
+eine vierte Dimension. Sie wird in der Nutzeroberfläche vollständig verborgen, solange
+der definierte Puffer nicht überschritten wird. Erst danach wird die Visualisierung
+dreidimensional und die zusätzliche Dimension sichtbar.
 
 ## Zielgruppe und Nutzung
 
@@ -36,8 +36,9 @@ Weich, sozial verbindend, vorsichtig, temperaturbewusst.
 
 ### Cringe
 
-Latente Tiefenkomponente. Sie beschreibt performative Selbstbeobachtung,
-überdeutliche Metakommunikation oder soziale Selbstinszenierung.
+Interne Tiefenkomponente. Sie beschreibt performative Selbstbeobachtung,
+überdeutliche Metakommunikation oder soziale Selbstinszenierung. In der sichtbaren
+Anwendung darf sie erst ab Überschreiten der Schwelle genannt werden.
 
 ## Scoring
 
@@ -47,8 +48,12 @@ Jede Antwort trägt Punkte auf vier Dimensionen:
 { fotzig: 0, atzig: 0, mausig: 0, cringe: 0 }
 ```
 
-Die Basisposition im Dreieck wird nur aus Fotzig, Atzig und Mausig berechnet. Cringe
-wird separat normalisiert.
+Unterhalb der Schwelle werden Cringe-Anteile proportional auf Fotzig, Atzig und
+Mausig umgelegt. Die sichtbaren Werte bestehen dann nur aus diesen drei Dimensionen
+und ergeben zusammen 100 Prozent.
+
+Ab der Schwelle werden Fotzig, Atzig, Mausig und Cringe gemeinsam normalisiert. Die
+vier sichtbaren Werte ergeben zusammen 100 Prozent.
 
 Aktuelle Schwelle:
 
@@ -56,15 +61,16 @@ Aktuelle Schwelle:
 Cringe >= 20 Prozent
 ```
 
-Unterhalb dieser Schwelle bleibt das Ergebnis im flachen 2D-Dreieck. Ab der Schwelle
-wird die 3D-Pyramide aktiviert.
+Unterhalb dieser Schwelle bleibt das Ergebnis im flachen 2D-Dreieck und enthält keinen
+Hinweis auf Cringe, Tiefendimension, Pyramide oder Rotation. Ab der Schwelle wird die
+3D-Pyramide aktiviert.
 
 ## Ergebnislogik
 
 Das Ergebnis besteht aus:
 
 - Titel aus stärkster und zweitstärkster Basisdimension
-- Prozentwerte für alle vier Dimensionen
+- Prozentwerte für drei oder vier Dimensionen, abhängig von der Schwelle
 - Visualisierung
 - einem Ergebnissatz
 
@@ -98,8 +104,9 @@ Bei modellrelevantem Cringe wird eine Pyramide gezeigt:
 - Spitze: Cringe
 - Ergebnis: Punkt im Volumen
 
-Die Pyramide ist per Maus oder Touch rotierbar. Technisch wird sie aktuell ohne externe
-3D-Bibliothek über eine kleine JavaScript-Projektion in SVG gezeichnet.
+Die Pyramide rotiert automatisch und ist per Maus oder Touch rotierbar. Technisch wird
+sie aktuell ohne externe 3D-Bibliothek über eine kleine JavaScript-Projektion in SVG
+gezeichnet.
 
 ## Bewusste Entscheidungen für Version 1
 

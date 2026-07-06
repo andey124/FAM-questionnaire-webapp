@@ -15,27 +15,32 @@ export function calculateResult(answers) {
     return sum;
   }, emptyScores());
 
-  const baseTotal = raw.fotzig + raw.atzig + raw.mausig || 1;
-  const allTotal = baseTotal + raw.cringe || 1;
+  const baseTotal = raw.fotzig + raw.atzig + raw.mausig;
+  const allTotal = baseTotal + raw.cringe;
+  const rawCringePercent = allTotal === 0 ? 0 : (raw.cringe / allTotal) * 100;
+  const isCringeRelevant = rawCringePercent >= CRINGE_THRESHOLD;
   const base = {
-    fotzig: raw.fotzig / baseTotal,
-    atzig: raw.atzig / baseTotal,
-    mausig: raw.mausig / baseTotal,
+    fotzig: baseTotal === 0 ? 1 / 3 : raw.fotzig / baseTotal,
+    atzig: baseTotal === 0 ? 1 / 3 : raw.atzig / baseTotal,
+    mausig: baseTotal === 0 ? 1 / 3 : raw.mausig / baseTotal,
   };
-  const percentages = {
-    fotzig: Math.round(base.fotzig * 100),
-    atzig: Math.round(base.atzig * 100),
-    mausig: Math.round(base.mausig * 100),
-    cringe: Math.round((raw.cringe / allTotal) * 100),
-  };
+  const percentages = isCringeRelevant
+    ? normalizePercentages({
+        fotzig: allTotal === 0 ? 0 : raw.fotzig / allTotal,
+        atzig: allTotal === 0 ? 0 : raw.atzig / allTotal,
+        mausig: allTotal === 0 ? 0 : raw.mausig / allTotal,
+        cringe: allTotal === 0 ? 0 : raw.cringe / allTotal,
+      })
+    : normalizePercentages(base);
 
   return {
     raw,
     base,
+    rawCringePercent,
     percentages,
-    isCringeRelevant: percentages.cringe >= CRINGE_THRESHOLD,
-    sentence: createResultSentence(percentages),
-    title: createResultTitle(percentages),
+    isCringeRelevant,
+    sentence: createResultSentence(percentages, isCringeRelevant),
+    title: createResultTitle(percentages, isCringeRelevant),
   };
 }
 
@@ -67,33 +72,52 @@ export function getPyramidPoint(result) {
   };
 }
 
-function createResultTitle(percentages) {
+function normalizePercentages(weights) {
+  const entries = Object.entries(weights);
+  const exact = entries.map(([key, value]) => ({
+    key,
+    value: value * 100,
+  }));
+  const rounded = Object.fromEntries(
+    exact.map((item) => [item.key, Math.floor(item.value)]),
+  );
+  const missing = 100 - Object.values(rounded).reduce((sum, value) => sum + value, 0);
+  const remainders = exact
+    .map((item) => ({
+      key: item.key,
+      remainder: item.value - Math.floor(item.value),
+    }))
+    .sort((a, b) => b.remainder - a.remainder);
+
+  for (let index = 0; index < missing; index += 1) {
+    rounded[remainders[index % remainders.length].key] += 1;
+  }
+
+  return rounded;
+}
+
+function createResultTitle(percentages, isCringeRelevant) {
   const [primary, secondary] = orderedBaseDimensions(percentages);
   const primaryLabel = label(primary);
   const secondaryLabel = label(secondary);
 
-  if (percentages.cringe >= CRINGE_THRESHOLD) {
+  if (isCringeRelevant) {
     return `${primaryLabel}-${secondaryLabel} mit latenter Cringe-Aktivierung`;
   }
 
   return `${primaryLabel}-${secondaryLabel} im flachen Modell`;
 }
 
-function createResultSentence(percentages) {
+function createResultSentence(percentages, isCringeRelevant) {
   const [primary, secondary] = orderedBaseDimensions(percentages);
   const primaryLabel = label(primary).toLowerCase();
   const secondaryLabel = label(secondary).toLowerCase();
-  const cringe = percentages.cringe;
 
-  if (cringe >= CRINGE_THRESHOLD) {
+  if (isCringeRelevant) {
     return `Die Auswertung zeigt eine dominant ${primaryLabel}e Grundstruktur mit ${secondaryLabel}er Beimischung. Die Cringe-Komponente überschreitet den Pufferbereich; eine dreidimensionale Interpretation ist erforderlich.`;
   }
 
-  if (cringe >= 14) {
-    return `Das Profil ist primär ${primaryLabel}, jedoch durch eine ${secondaryLabel}e Nebenachse moduliert. Cringe bleibt messbar, aber unterhalb der Modellrelevanz.`;
-  }
-
-  return `Ihre Positionierung ist überwiegend ${primaryLabel} mit ${secondaryLabel}er Reaktionsneigung. Die latente Cringe-Dimension bleibt im unkritischen Hintergrundrauschen.`;
+  return `Ihre Positionierung ist überwiegend ${primaryLabel} mit ${secondaryLabel}er Reaktionsneigung. Das Profil bleibt im flachen FAM-Modell stabil interpretierbar.`;
 }
 
 function orderedBaseDimensions(percentages) {

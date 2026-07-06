@@ -1,6 +1,5 @@
 import { questions } from "./questions.js";
 import {
-  CRINGE_THRESHOLD,
   barycentricToTriangle,
   calculateResult,
   getPyramidPoint,
@@ -13,9 +12,11 @@ const state = {
   currentQuestion: 0,
   selectedAnswers: Array.from({ length: questions.length }, () => null),
   rotation: { x: -0.52, y: 0.72 },
+  animationFrame: null,
 };
 
 function render() {
+  stopPyramidAnimation();
   if (state.screen === "intro") renderIntro();
   if (state.screen === "question") renderQuestion();
   if (state.screen === "result") renderResult();
@@ -28,11 +29,11 @@ function renderIntro() {
       <h1>Fotzig Atzig Mausig</h1>
       <p class="lead">
         Ein semi-standardisiertes Kurzverfahren zur Positionsbestimmung im FAM-Dreieck
-        mit optionaler Cringe-Tiefenprüfung.
+        anhand situativer Antwortmuster.
       </p>
       <div class="hero-actions">
         <button class="primary-button" data-action="start">Test starten</button>
-        <span class="meta-note">12 Items · 4 Antwortmuster · 1 latente Dimension</span>
+        <span class="meta-note">12 Items · 3 Ausprägungen · 1 Ergebnisprofil</span>
       </div>
     </section>
     <section class="method-strip">
@@ -47,10 +48,6 @@ function renderIntro() {
       <article>
         <strong>Mausig</strong>
         <span>weich, verbindend, sozial temperaturbewusst</span>
-      </article>
-      <article>
-        <strong>Cringe</strong>
-        <span>latente Tiefenkomponente, ab ${CRINGE_THRESHOLD}% modellrelevant</span>
       </article>
     </section>
   `;
@@ -135,7 +132,7 @@ function renderResult() {
           ${scoreRow("Fotzig", result.percentages.fotzig)}
           ${scoreRow("Atzig", result.percentages.atzig)}
           ${scoreRow("Mausig", result.percentages.mausig)}
-          ${scoreRow("Cringe", result.percentages.cringe)}
+          ${result.isCringeRelevant ? scoreRow("Cringe", result.percentages.cringe) : ""}
         </div>
         <div class="nav-row left">
           <button class="ghost-button" data-action="restart">Neu kalibrieren</button>
@@ -144,13 +141,11 @@ function renderResult() {
       </div>
       <div class="visual-panel">
         ${result.isCringeRelevant ? pyramidTemplate() : triangleTemplate(result)}
-        <p class="visual-caption">
-          ${
-            result.isCringeRelevant
-              ? "Cringe ist modellrelevant. Ziehen Sie die Pyramide mit der Maus oder dem Finger."
-              : `Cringe liegt unter ${CRINGE_THRESHOLD}%. Die flache Dreiecksdarstellung bleibt ausreichend.`
-          }
-        </p>
+        ${
+          result.isCringeRelevant
+            ? '<p class="visual-caption">Cringe ist modellrelevant. Ziehen Sie die Pyramide mit der Maus oder dem Finger.</p>'
+            : ""
+        }
       </div>
     </section>
   `;
@@ -221,6 +216,7 @@ function mountPyramid(result) {
   };
 
   function draw() {
+    if (!svg.isConnected) return;
     const projected = Object.fromEntries(
       Object.entries(vertices).map(([key, value]) => [key, project(value)]),
     );
@@ -295,7 +291,27 @@ function mountPyramid(result) {
     isDragging = false;
   });
 
+  function animate() {
+    if (!svg.isConnected) {
+      stopPyramidAnimation();
+      return;
+    }
+    if (!isDragging) {
+      state.rotation.y += 0.006;
+      draw();
+    }
+    state.animationFrame = requestAnimationFrame(animate);
+  }
+
   draw();
+  state.animationFrame = requestAnimationFrame(animate);
+}
+
+function stopPyramidAnimation() {
+  if (state.animationFrame !== null) {
+    cancelAnimationFrame(state.animationFrame);
+    state.animationFrame = null;
+  }
 }
 
 function points(...items) {
