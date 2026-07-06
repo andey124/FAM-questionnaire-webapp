@@ -105,7 +105,7 @@ function createResultTitle(percentages, isCringeRelevant) {
     return `${primaryLabel}-${secondaryLabel} mit latenter Cringe-Aktivierung`;
   }
 
-  return `${primaryLabel}-${secondaryLabel} im flachen Modell`;
+  return `${primaryLabel}-${secondaryLabel} Profil`;
 }
 
 function createResultSentence(percentages, isCringeRelevant) {
@@ -117,7 +117,7 @@ function createResultSentence(percentages, isCringeRelevant) {
     return `Die Auswertung zeigt eine dominant ${primaryLabel}e Grundstruktur mit ${secondaryLabel}er Beimischung. Die Cringe-Komponente überschreitet den Pufferbereich; eine dreidimensionale Interpretation ist erforderlich.`;
   }
 
-  return `Ihre Positionierung ist überwiegend ${primaryLabel} mit ${secondaryLabel}er Reaktionsneigung. Das Profil bleibt im flachen FAM-Modell stabil interpretierbar.`;
+  return `Ihre Positionierung ist überwiegend ${primaryLabel} mit ${secondaryLabel}er Reaktionsneigung. Das Ergebnis zeigt ein klar interpretierbares FAM-Profil.`;
 }
 
 function orderedBaseDimensions(percentages) {

@@ -1,6 +1,5 @@
 import { questions } from "./questions.js";
 import {
-  barycentricToTriangle,
   calculateResult,
   getPyramidPoint,
 } from "./scoring.js";
@@ -179,16 +178,38 @@ function scoreRow(label, value) {
 }
 
 function triangleTemplate(result) {
-  const point = barycentricToTriangle(result.base);
+  const vertices = {
+    fotzig: { x: 280, y: 58 },
+    atzig: { x: 82, y: 374 },
+    mausig: { x: 478, y: 374 },
+  };
+  const dot = {
+    x:
+      result.base.fotzig * vertices.fotzig.x +
+      result.base.atzig * vertices.atzig.x +
+      result.base.mausig * vertices.mausig.x,
+    y:
+      result.base.fotzig * vertices.fotzig.y +
+      result.base.atzig * vertices.atzig.y +
+      result.base.mausig * vertices.mausig.y,
+  };
 
   return `
-    <svg class="triangle-visual" viewBox="0 0 100 100" role="img" aria-label="FAM-Dreieck">
-      <polygon points="50,8 8,86 92,86" class="triangle-face"></polygon>
-      <line x1="50" y1="8" x2="${point.x}" y2="${point.y}" class="triangle-guide"></line>
-      <circle cx="${point.x}" cy="${point.y}" r="3.6" class="result-dot"></circle>
-      <text x="50" y="5" text-anchor="middle">Fotzig</text>
-      <text x="5" y="95" text-anchor="start">Atzig</text>
-      <text x="95" y="95" text-anchor="end">Mausig</text>
+    <svg class="triangle-visual" viewBox="0 0 560 460" role="img" aria-label="FAM-Dreieck">
+      <polygon
+        points="${vertices.fotzig.x},${vertices.fotzig.y} ${vertices.atzig.x},${vertices.atzig.y} ${vertices.mausig.x},${vertices.mausig.y}"
+        class="triangle-face"
+      ></polygon>
+      <line x1="${vertices.fotzig.x}" y1="${vertices.fotzig.y}" x2="${dot.x}" y2="${dot.y}" class="triangle-guide"></line>
+      <line x1="${vertices.atzig.x}" y1="${vertices.atzig.y}" x2="${dot.x}" y2="${dot.y}" class="triangle-guide"></line>
+      <line x1="${vertices.mausig.x}" y1="${vertices.mausig.y}" x2="${dot.x}" y2="${dot.y}" class="triangle-guide"></line>
+      <line x1="${vertices.fotzig.x}" y1="${vertices.fotzig.y}" x2="${vertices.atzig.x}" y2="${vertices.atzig.y}" class="triangle-edge"></line>
+      <line x1="${vertices.atzig.x}" y1="${vertices.atzig.y}" x2="${vertices.mausig.x}" y2="${vertices.mausig.y}" class="triangle-edge"></line>
+      <line x1="${vertices.mausig.x}" y1="${vertices.mausig.y}" x2="${vertices.fotzig.x}" y2="${vertices.fotzig.y}" class="triangle-edge"></line>
+      <circle cx="${dot.x}" cy="${dot.y}" r="9" class="result-dot"></circle>
+      ${label("Fotzig", { x: vertices.fotzig.x, y: vertices.fotzig.y - 12 })}
+      ${label("Atzig", { x: vertices.atzig.x, y: vertices.atzig.y + 42 })}
+      ${label("Mausig", { x: vertices.mausig.x, y: vertices.mausig.y + 42 })}
     </svg>
   `;
 }
