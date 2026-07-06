@@ -52,9 +52,8 @@ fragen-tool.html
 ```
 
 Die Datei kann direkt im Browser geöffnet werden. Dort lassen sich beliebig viele
-Fragen und Antworten anlegen, als JSON prüfen und herunterladen. Die exportierte Datei
-enthält Metadaten und ein `questions`-Array im gleichen Grundformat wie der interne
-Fragenkatalog:
+Fragen und Antworten anlegen und als Datei herunterladen. Die exportierte Datei
+enthält ein Array im gleichen Grundformat wie der interne Fragenkatalog:
 
 ```js
 {

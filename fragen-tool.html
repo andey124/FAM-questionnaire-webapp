@@ -303,22 +303,6 @@
         padding-left: 18px;
       }
 
-      .preview {
-        width: 100%;
-        min-height: 360px;
-        margin-top: 12px;
-        padding: 12px;
-        overflow: auto;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: rgba(45, 41, 48, 0.92);
-        color: #fff9f5;
-        font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
-        font-size: 0.78rem;
-        line-height: 1.48;
-        white-space: pre;
-      }
-
       .empty {
         padding: 26px;
         border: 1px dashed var(--line);
@@ -326,14 +310,6 @@
         background: rgba(255, 255, 255, 0.46);
         color: var(--muted);
         text-align: center;
-      }
-
-      .file-input {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
       }
 
       @media (max-width: 900px) {
@@ -385,19 +361,17 @@
     <main class="page">
       <header class="hero">
         <div>
-          <p class="eyebrow">Institut für angewandte Itemproduktion</p>
-          <h1>FAM-Fragentool</h1>
+          <p class="eyebrow">Fragen für den FAM-Test</p>
+          <h1>Fragen bauen</h1>
           <p class="lead">
-            Ein lokales Hilfsformular zur Erzeugung plausibel trockener Items.
-            Die exportierte JSON-Datei enthält Fragen, Antworten und Punktwerte für
-            Fotzig, Atzig, Mausig und Cringe.
+            Schreib eine Situation auf, füge passende Antworten hinzu und gib jeder
+            Antwort eine grobe Richtung. Wenn alles vollständig ist, kannst du die
+            fertige Datei herunterladen und verschicken.
           </p>
         </div>
         <div class="toolbar">
-          <button class="secondary" type="button" data-action="import">JSON laden</button>
           <button class="secondary" type="button" data-action="sample">Beispiel einfügen</button>
           <button class="primary" type="button" data-action="add-question">Frage hinzufügen</button>
-          <input class="file-input" type="file" accept="application/json,.json" data-file-input>
         </div>
       </header>
 
@@ -406,8 +380,8 @@
           <div id="questions"></div>
         </div>
 
-        <aside class="panel" aria-label="Export">
-          <p class="eyebrow">Exportbefund</p>
+        <aside class="panel" aria-label="Speichern">
+          <p class="eyebrow">Fertig?</p>
           <div class="stats">
             <div class="stat">
               <strong data-stat="questions">0</strong>
@@ -420,11 +394,10 @@
           </div>
           <ul class="error-list" data-errors></ul>
           <p class="hint">
-            Empfehlung: pro Antwort eine erkennbare Hauptdimension mit 2 bis 3 Punkten
-            setzen. Cringe kann als latente Beimischung verwendet werden.
+            Punkte sind nur grobe Gewichte: 0 bedeutet gar nicht, 3 bedeutet stark.
+            Pro Antwort reicht meist eine klare Hauptrichtung.
           </p>
-          <button class="primary" type="button" data-action="download">JSON herunterladen</button>
-          <pre class="preview" data-preview aria-label="JSON-Vorschau"></pre>
+          <button class="primary" type="button" data-action="download">Fragen-Datei herunterladen</button>
         </aside>
       </section>
     </main>
@@ -443,8 +416,6 @@
       };
 
       const questionsRoot = document.querySelector("#questions");
-      const fileInput = document.querySelector("[data-file-input]");
-
       document.querySelector("[data-action='add-question']").addEventListener("click", () => {
         state.questions.push(createQuestion());
         render();
@@ -461,29 +432,6 @@
           ],
         });
         render();
-      });
-
-      document.querySelector("[data-action='import']").addEventListener("click", () => {
-        fileInput.click();
-      });
-
-      fileInput.addEventListener("change", async () => {
-        const [file] = fileInput.files;
-        if (!file) return;
-        try {
-          const content = await file.text();
-          const parsed = JSON.parse(content);
-          const imported = Array.isArray(parsed) ? parsed : parsed.questions;
-          if (!Array.isArray(imported)) {
-            throw new Error("Die Datei enthält kein Fragen-Array.");
-          }
-          state.questions = imported.map(normalizeQuestion);
-          render();
-        } catch (error) {
-          alert(`Die JSON-Datei konnte nicht geladen werden: ${error.message}`);
-        } finally {
-          fileInput.value = "";
-        }
       });
 
       document.querySelector("[data-action='download']").addEventListener("click", () => {
@@ -516,23 +464,6 @@
 
       function answer(text, fotzig, atzig, mausig, cringe) {
         return { text, scores: { fotzig, atzig, mausig, cringe } };
-      }
-
-      function normalizeQuestion(question) {
-        return {
-          text: String(question.text ?? ""),
-          answers: Array.isArray(question.answers)
-            ? question.answers.map((item) =>
-                answer(
-                  String(item.text ?? ""),
-                  numberScore(item.scores?.fotzig),
-                  numberScore(item.scores?.atzig),
-                  numberScore(item.scores?.mausig),
-                  numberScore(item.scores?.cringe),
-                ),
-              )
-            : [],
-        };
       }
 
       function numberScore(value) {
@@ -635,11 +566,7 @@
       }
 
       function createExport() {
-        return {
-          schemaVersion: 1,
-          generatedBy: "FAM-Fragentool",
-          generatedAt: new Date().toISOString(),
-          questions: state.questions.map((question) => ({
+        return state.questions.map((question) => ({
             text: question.text.trim(),
             answers: question.answers.map((item) => ({
               text: item.text.trim(),
@@ -647,8 +574,7 @@
                 dimensions.map((dimension) => [dimension, numberScore(item.scores[dimension])]),
               ),
             })),
-          })),
-        };
+          }));
       }
 
       function validate() {
@@ -684,7 +610,6 @@
 
       function updateExportPanel() {
         const validation = validate();
-        const exportObject = createExport();
         const answerCount = state.questions.reduce((sum, question) => sum + question.answers.length, 0);
 
         document.querySelector("[data-stat='questions']").textContent = state.questions.length;
@@ -692,7 +617,6 @@
         document.querySelector("[data-errors]").innerHTML = validation.errors
           .map((error) => `<li>${escapeHtml(error)}</li>`)
           .join("");
-        document.querySelector("[data-preview]").textContent = JSON.stringify(exportObject, null, 2);
         document.querySelector("[data-action='download']").disabled = validation.errors.length > 0;
       }
 
