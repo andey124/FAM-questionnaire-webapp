@@ -3,34 +3,34 @@
 ## Phase 1: Statische Basis
 
 - `index.html` als Einstiegspunkt.
-- `src/app.js` fuer UI, Navigation und Rendering.
-- `src/questions.js` fuer Fragen und Antwortscores.
-- `src/scoring.js` fuer Auswertung, Ergebnistext und Koordinaten.
-- `src/styles.css` fuer pastell-chaotisches, aber formal wirkendes Interface.
+- `src/app.js` für UI, Navigation und Rendering.
+- `src/questions.js` für Fragen und Antwortscores.
+- `src/scoring.js` für Auswertung, Ergebnistext und Koordinaten.
+- `src/styles.css` für pastell-chaotisches, aber formal wirkendes Interface.
 
 Status: umgesetzt.
 
 ## Phase 2: Inhaltliche Kalibrierung
 
-- Fragen lesen und Ton pruefen.
-- Antwortoptionen schaerfen.
+- Fragen lesen und Ton prüfen.
+- Antwortoptionen schärfen.
 - Scores nachjustieren.
 - Ergebnisformulierungen erweitern.
 - Cringe-Schwelle testen.
 
 Empfehlung: Erst mit 5 bis 10 Personen ausprobieren und schauen, ob die Ergebnisse
-gefuehlt passen. Danach Scores feinjustieren.
+gefühlt passen. Danach Scores feinjustieren.
 
 ## Phase 3: Visueller Test
 
-- Pastell/chaotische Richtung im Browser pruefen.
-- Lesbarkeit auf Mobilgeraeten pruefen.
+- Pastell/chaotische Richtung im Browser prüfen.
+- Lesbarkeit auf Mobilgeräten prüfen.
 - 3D-Pyramide mit Maus und Touch testen.
-- Gegebenenfalls Farben, Groessen und Abstaende reduzieren oder mutiger machen.
+- Gegebenenfalls Farben, Größen und Abstände reduzieren oder mutiger machen.
 
 ## Phase 4: Hosting
 
-Primaer:
+Primär:
 
 - GitHub Pages direkt aus dem Repository.
 
@@ -39,14 +39,13 @@ Fallback:
 - Dateien per FTP/SFTP auf Netcup-Webspace laden.
 
 Da die App keinen Build-Schritt braucht, kann exakt derselbe Stand auf beiden Wegen
-veroeffentlicht werden.
+veröffentlicht werden.
 
-## Moegliche Erweiterungen
+## Mögliche Erweiterungen
 
 - Ergebnis als Bild exportieren.
 - Share-Text generieren.
 - Mehr Ergebnisprofile statt nur dynamischer Satz.
-- Optionaler Debug-Modus fuer Score-Anzeige pro Antwort.
+- Optionaler Debug-Modus für Score-Anzeige pro Antwort.
 - Fragebogen als JSON auslagern, damit Nicht-Code-Editing leichter wird.
-- Three.js oder React spaeter nachziehen, wenn die 3D-Visualisierung komplexer werden soll.
-
+- Three.js oder React später nachziehen, wenn die 3D-Visualisierung komplexer werden soll.

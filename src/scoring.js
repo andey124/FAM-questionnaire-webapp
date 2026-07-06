@@ -86,14 +86,14 @@ function createResultSentence(percentages) {
   const cringe = percentages.cringe;
 
   if (cringe >= CRINGE_THRESHOLD) {
-    return `Die Auswertung zeigt eine dominant ${primaryLabel}e Grundstruktur mit ${secondaryLabel}er Beimischung. Die Cringe-Komponente ueberschreitet den Pufferbereich; eine dreidimensionale Interpretation ist erforderlich.`;
+    return `Die Auswertung zeigt eine dominant ${primaryLabel}e Grundstruktur mit ${secondaryLabel}er Beimischung. Die Cringe-Komponente überschreitet den Pufferbereich; eine dreidimensionale Interpretation ist erforderlich.`;
   }
 
   if (cringe >= 14) {
-    return `Das Profil ist primaer ${primaryLabel}, jedoch durch eine ${secondaryLabel}e Nebenachse moduliert. Cringe bleibt messbar, aber unterhalb der Modellrelevanz.`;
+    return `Das Profil ist primär ${primaryLabel}, jedoch durch eine ${secondaryLabel}e Nebenachse moduliert. Cringe bleibt messbar, aber unterhalb der Modellrelevanz.`;
   }
 
-  return `Ihre Positionierung ist ueberwiegend ${primaryLabel} mit ${secondaryLabel}er Reaktionsneigung. Die latente Cringe-Dimension bleibt im unkritischen Hintergrundrauschen.`;
+  return `Ihre Positionierung ist überwiegend ${primaryLabel} mit ${secondaryLabel}er Reaktionsneigung. Die latente Cringe-Dimension bleibt im unkritischen Hintergrundrauschen.`;
 }
 
 function orderedBaseDimensions(percentages) {
@@ -110,4 +110,3 @@ function label(dimension) {
     cringe: "Cringe",
   }[dimension];
 }
-

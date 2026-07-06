@@ -4,18 +4,18 @@
 
 Die Anwendung ist ein kurzer, deutschsprachiger Fragebogen zur Einordnung in der
 Dreiecksskala **Fotzig / Atzig / Mausig**. Der Ton ist semi-wissenschaftlich:
-trocken, beobachtend und formal genug, dass die Absurditaet nicht sofort als reiner
+trocken, beobachtend und formal genug, dass die Absurdität nicht sofort als reiner
 Meme-Test wirkt.
 
 Neben den drei sichtbaren Basisdimensionen gibt es eine latente vierte Dimension:
 **Cringe**. Sie wird nicht als normale Ecke des Dreiecks behandelt, sondern als
-Tiefenachse. Erst wenn Cringe den definierten Puffer ueberschreitet, wird die
+Tiefenachse. Erst wenn Cringe den definierten Puffer überschreitet, wird die
 Visualisierung dreidimensional.
 
 ## Zielgruppe und Nutzung
 
 - Nutzer:innen beantworten 12 Situationen.
-- Pro Situation wird genau eine Antwort gewaehlt.
+- Pro Situation wird genau eine Antwort gewählt.
 - Nach Abschluss erscheint ein Ergebnis mit Prozentwerten, Visualisierung und einem
   Ergebnissatz.
 - Es gibt vorerst keine Speicherung, kein Teilen und kein Tracking.
@@ -37,11 +37,11 @@ Weich, sozial verbindend, vorsichtig, temperaturbewusst.
 ### Cringe
 
 Latente Tiefenkomponente. Sie beschreibt performative Selbstbeobachtung,
-ueberdeutliche Metakommunikation oder soziale Selbstinszenierung.
+überdeutliche Metakommunikation oder soziale Selbstinszenierung.
 
 ## Scoring
 
-Jede Antwort traegt Punkte auf vier Dimensionen:
+Jede Antwort trägt Punkte auf vier Dimensionen:
 
 ```js
 { fotzig: 0, atzig: 0, mausig: 0, cringe: 0 }
@@ -63,8 +63,8 @@ wird die 3D-Pyramide aktiviert.
 
 Das Ergebnis besteht aus:
 
-- Titel aus staerkster und zweitstaerkster Basisdimension
-- Prozentwerte fuer alle vier Dimensionen
+- Titel aus stärkster und zweitstärkster Basisdimension
+- Prozentwerte für alle vier Dimensionen
 - Visualisierung
 - einem Ergebnissatz
 
@@ -94,14 +94,14 @@ Der Ergebnispunkt wird aus baryzentrischen Anteilen berechnet.
 
 Bei modellrelevantem Cringe wird eine Pyramide gezeigt:
 
-- Grundflaeche: Fotzig / Atzig / Mausig
+- Grundfläche: Fotzig / Atzig / Mausig
 - Spitze: Cringe
 - Ergebnis: Punkt im Volumen
 
 Die Pyramide ist per Maus oder Touch rotierbar. Technisch wird sie aktuell ohne externe
-3D-Bibliothek ueber eine kleine JavaScript-Projektion in SVG gezeichnet.
+3D-Bibliothek über eine kleine JavaScript-Projektion in SVG gezeichnet.
 
-## Bewusste Entscheidungen fuer Version 1
+## Bewusste Entscheidungen für Version 1
 
 - Komplett deutsch.
 - Eine Antwort pro Frage.
@@ -110,4 +110,3 @@ Die Pyramide ist per Maus oder Touch rotierbar. Technisch wird sie aktuell ohne 
 - Kein Build-Schritt.
 - Kein Teilen/Speichern.
 - Fragenkatalog direkt im Code editierbar.
-

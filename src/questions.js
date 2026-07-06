@@ -3,7 +3,7 @@ export const questions = [
     text: "Sie betreten einen Raum, in dem Sie niemand erwartet.",
     answers: [
       {
-        text: "Ich wirke so, als sei meine Anwesenheit Teil eines groesseren Plans.",
+        text: "Ich wirke so, als sei meine Anwesenheit Teil eines größeren Plans.",
         scores: { fotzig: 3, atzig: 0, mausig: 0, cringe: 1 },
       },
       {
@@ -11,7 +11,7 @@ export const questions = [
         scores: { fotzig: 0, atzig: 3, mausig: 0, cringe: 0 },
       },
       {
-        text: "Ich frage leise, ob ich hier richtig bin, obwohl ich es weiss.",
+        text: "Ich frage leise, ob ich hier richtig bin, obwohl ich es weiß.",
         scores: { fotzig: 0, atzig: 0, mausig: 3, cringe: 0 },
       },
       {
@@ -24,7 +24,7 @@ export const questions = [
     text: "Jemand macht Ihnen ein halbgares Kompliment.",
     answers: [
       {
-        text: "Ich bedanke mich, als haette ich gerade einen Preis entgegengenommen.",
+        text: "Ich bedanke mich, als hätte ich gerade einen Preis entgegengenommen.",
         scores: { fotzig: 2, atzig: 0, mausig: 1, cringe: 0 },
       },
       {
@@ -32,7 +32,7 @@ export const questions = [
         scores: { fotzig: 3, atzig: 1, mausig: 0, cringe: 0 },
       },
       {
-        text: "Ich nehme es wohlwollend an und speichere es fuer spaeter.",
+        text: "Ich nehme es wohlwollend an und speichere es für später.",
         scores: { fotzig: 0, atzig: 0, mausig: 3, cringe: 0 },
       },
       {
@@ -53,11 +53,11 @@ export const questions = [
         scores: { fotzig: 1, atzig: 3, mausig: 0, cringe: 0 },
       },
       {
-        text: "Ich waehle den Ort, bei dem alle etwas finden.",
+        text: "Ich wähle den Ort, bei dem alle etwas finden.",
         scores: { fotzig: 0, atzig: 0, mausig: 3, cringe: 0 },
       },
       {
-        text: "Ich erstelle spontan eine Bewertungsmatrix mit Bauchgefuehl-Korrektur.",
+        text: "Ich erstelle spontan eine Bewertungsmatrix mit Bauchgefühl-Korrektur.",
         scores: { fotzig: 0, atzig: 1, mausig: 1, cringe: 3 },
       },
     ],
@@ -78,20 +78,20 @@ export const questions = [
         scores: { fotzig: 0, atzig: 0, mausig: 3, cringe: 0 },
       },
       {
-        text: "Ich erklaere, dass Kleidung ein dialogisches Missverstaendnis ist.",
+        text: "Ich erkläre, dass Kleidung ein dialogisches Missverständnis ist.",
         scores: { fotzig: 0, atzig: 0, mausig: 1, cringe: 3 },
       },
     ],
   },
   {
-    text: "Eine Person erzaehlt eine sehr lange Geschichte ohne erkennbaren Punkt.",
+    text: "Eine Person erzählt eine sehr lange Geschichte ohne erkennbaren Punkt.",
     answers: [
       {
-        text: "Ich frage: 'Und an welcher Stelle wird das fuer uns relevant?'",
+        text: "Ich frage: 'Und an welcher Stelle wird das für uns relevant?'",
         scores: { fotzig: 3, atzig: 1, mausig: 0, cringe: 0 },
       },
       {
-        text: "Ich halte Blickkontakt, aber mein Gesicht kuendigt Konsequenzen an.",
+        text: "Ich halte Blickkontakt, aber mein Gesicht kündigt Konsequenzen an.",
         scores: { fotzig: 1, atzig: 3, mausig: 0, cringe: 0 },
       },
       {
@@ -112,11 +112,11 @@ export const questions = [
         scores: { fotzig: 3, atzig: 1, mausig: 0, cringe: 0 },
       },
       {
-        text: "Ich hoere sie auf 1,8-facher Geschwindigkeit und mache Stichpunkte.",
+        text: "Ich höre sie auf 1,8-facher Geschwindigkeit und mache Stichpunkte.",
         scores: { fotzig: 0, atzig: 3, mausig: 0, cringe: 1 },
       },
       {
-        text: "Ich hoere sie komplett und antworte verhaeltnismaessig.",
+        text: "Ich höre sie komplett und antworte verhältnismäßig.",
         scores: { fotzig: 0, atzig: 0, mausig: 3, cringe: 0 },
       },
       {
@@ -129,11 +129,11 @@ export const questions = [
     text: "Ihr Outfit wird kommentiert.",
     answers: [
       {
-        text: "Ich nehme es als bestaetigten Befund meiner Wirkung.",
+        text: "Ich nehme es als bestätigten Befund meiner Wirkung.",
         scores: { fotzig: 3, atzig: 0, mausig: 0, cringe: 0 },
       },
       {
-        text: "Ich frage zurueck, ob das eine Beobachtung oder eine Bitte war.",
+        text: "Ich frage zurück, ob das eine Beobachtung oder eine Bitte war.",
         scores: { fotzig: 2, atzig: 2, mausig: 0, cringe: 0 },
       },
       {
@@ -141,7 +141,7 @@ export const questions = [
         scores: { fotzig: 0, atzig: 0, mausig: 3, cringe: 0 },
       },
       {
-        text: "Ich erklaere die emotionale Farbtemperatur meiner Entscheidung.",
+        text: "Ich erkläre die emotionale Farbtemperatur meiner Entscheidung.",
         scores: { fotzig: 0, atzig: 0, mausig: 1, cringe: 3 },
       },
     ],
@@ -162,7 +162,7 @@ export const questions = [
         scores: { fotzig: 0, atzig: 0, mausig: 3, cringe: 0 },
       },
       {
-        text: "Ich fuehre Hausregeln als soziales Experiment ein.",
+        text: "Ich führe Hausregeln als soziales Experiment ein.",
         scores: { fotzig: 1, atzig: 0, mausig: 0, cringe: 3 },
       },
     ],
@@ -175,24 +175,24 @@ export const questions = [
         scores: { fotzig: 3, atzig: 0, mausig: 0, cringe: 0 },
       },
       {
-        text: "Ich frage nach einem Zeitfenster fuer die Spontaneitaet.",
+        text: "Ich frage nach einem Zeitfenster für die Spontaneität.",
         scores: { fotzig: 0, atzig: 3, mausig: 0, cringe: 1 },
       },
       {
-        text: "Ich bin dabei, solange niemand ueberfordert wird.",
+        text: "Ich bin dabei, solange niemand überfordert wird.",
         scores: { fotzig: 0, atzig: 0, mausig: 3, cringe: 0 },
       },
       {
-        text: "Ich nenne es 'kuratiertes Chaos' und fuehle mich vorbereitet.",
+        text: "Ich nenne es 'kuratiertes Chaos' und fühle mich vorbereitet.",
         scores: { fotzig: 0, atzig: 1, mausig: 0, cringe: 3 },
       },
     ],
   },
   {
-    text: "Sie sehen sich zufaellig in einer Fensterspiegelung.",
+    text: "Sie sehen sich zufällig in einer Fensterspiegelung.",
     answers: [
       {
-        text: "Ich pruefe kurz, ob die Realitaet mithalten kann.",
+        text: "Ich prüfe kurz, ob die Realität mithalten kann.",
         scores: { fotzig: 3, atzig: 0, mausig: 0, cringe: 0 },
       },
       {
@@ -200,11 +200,11 @@ export const questions = [
         scores: { fotzig: 1, atzig: 3, mausig: 0, cringe: 0 },
       },
       {
-        text: "Ich laechle peinlich beruehrt und tue so, als waere nichts.",
+        text: "Ich lächle peinlich berührt und tue so, als wäre nichts.",
         scores: { fotzig: 0, atzig: 0, mausig: 3, cringe: 0 },
       },
       {
-        text: "Ich denke: 'Interessante Aussenwahrnehmung des Selbst.'",
+        text: "Ich denke: 'Interessante Außenwahrnehmung des Selbst.'",
         scores: { fotzig: 0, atzig: 0, mausig: 1, cringe: 3 },
       },
     ],
@@ -234,7 +234,7 @@ export const questions = [
     text: "Sie werden gebeten, sich kurz vorzustellen.",
     answers: [
       {
-        text: "Ich liefere eine knappe Version mit spuerbarer Markenfuehrung.",
+        text: "Ich liefere eine knappe Version mit spürbarer Markenführung.",
         scores: { fotzig: 3, atzig: 0, mausig: 0, cringe: 0 },
       },
       {
@@ -242,14 +242,13 @@ export const questions = [
         scores: { fotzig: 0, atzig: 3, mausig: 0, cringe: 0 },
       },
       {
-        text: "Ich erwaehne etwas Harmloses, damit alle gut andocken koennen.",
+        text: "Ich erwähne etwas Harmloses, damit alle gut andocken können.",
         scores: { fotzig: 0, atzig: 0, mausig: 3, cringe: 0 },
       },
       {
-        text: "Ich beginne mit: 'Ich wuerde mich als Prozess beschreiben.'",
+        text: "Ich beginne mit: 'Ich würde mich als Prozess beschreiben.'",
         scores: { fotzig: 0, atzig: 0, mausig: 0, cringe: 3 },
       },
     ],
   },
 ];
-

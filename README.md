@@ -45,9 +45,13 @@ src/scoring.js
 
 Die aktuelle Cringe-Schwelle liegt bei 20 Prozent.
 
+## Kodierung
+
+Die Anwendung verwendet UTF-8. Deutsche Umlaute wie ä, ö und ü sollen direkt in UI,
+Fragen und Dokumentation stehen.
+
 ## Dokumentation
 
 - [Spezifikation](docs/specifikation.md)
 - [Umsetzungsplan](docs/umsetzungsplan.md)
 - [Hosting](docs/hosting.md)
-

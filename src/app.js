@@ -24,11 +24,11 @@ function render() {
 function renderIntro() {
   app.innerHTML = `
     <section class="hero-panel">
-      <p class="eyebrow">Institut fuer angewandte Sozialgeometrie</p>
+      <p class="eyebrow">Institut für angewandte Sozialgeometrie</p>
       <h1>Fotzig Atzig Mausig</h1>
       <p class="lead">
         Ein semi-standardisiertes Kurzverfahren zur Positionsbestimmung im FAM-Dreieck
-        mit optionaler Cringe-Tiefenpruefung.
+        mit optionaler Cringe-Tiefenprüfung.
       </p>
       <div class="hero-actions">
         <button class="primary-button" data-action="start">Test starten</button>
@@ -88,7 +88,7 @@ function renderQuestion() {
           .join("")}
       </div>
       <div class="nav-row">
-        <button class="ghost-button" data-action="back" ${state.currentQuestion === 0 ? "disabled" : ""}>Zurueck</button>
+        <button class="ghost-button" data-action="back" ${state.currentQuestion === 0 ? "disabled" : ""}>Zurück</button>
         <button class="primary-button" data-action="next" ${selected === null ? "disabled" : ""}>
           ${state.currentQuestion === questions.length - 1 ? "Auswerten" : "Weiter"}
         </button>
@@ -139,7 +139,7 @@ function renderResult() {
         </div>
         <div class="nav-row left">
           <button class="ghost-button" data-action="restart">Neu kalibrieren</button>
-          <button class="primary-button" data-action="revise">Antworten pruefen</button>
+          <button class="primary-button" data-action="revise">Antworten prüfen</button>
         </div>
       </div>
       <div class="visual-panel">
@@ -311,4 +311,3 @@ function label(text, point) {
 }
 
 render();
-

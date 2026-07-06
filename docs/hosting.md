@@ -2,14 +2,14 @@
 
 ## Empfehlung: GitHub Pages
 
-GitHub Pages ist fuer diese App die einfachste kostenlose Loesung. Die App ist statisch
+GitHub Pages ist für diese App die einfachste kostenlose Lösung. Die App ist statisch
 und braucht im Betrieb nur HTML, CSS und JavaScript.
 
 Vorgehen:
 
 1. Repository zu GitHub pushen.
 2. In GitHub: `Settings` -> `Pages`.
-3. Als Quelle den Branch auswaehlen, z. B. `main`.
+3. Als Quelle den Branch auswählen, z. B. `main`.
 4. Als Ordner `/root` verwenden.
 5. Speichern.
 
@@ -19,7 +19,7 @@ Danach ist die App typischerweise unter dieser Form erreichbar:
 https://BENUTZERNAME.github.io/REPOSITORY/
 ```
 
-Wenn spaeter eine eigene Domain genutzt werden soll, kann GitHub Pages ebenfalls eine
+Wenn später eine eigene Domain genutzt werden soll, kann GitHub Pages ebenfalls eine
 Custom Domain verwenden.
 
 ## Alternative: Netcup Webhosting
@@ -39,22 +39,21 @@ docs/ optional
 README.md optional
 ```
 
-3. Zielordner ist je nach Domain/Subdomain der oeffentliche Webordner im Netcup Hosting.
+3. Zielordner ist je nach Domain/Subdomain der öffentliche Webordner im Netcup Hosting.
 
 Wichtig: Auf dem Server muss nichts installiert werden. Der Browser der Besucher:innen
-fuehrt das JavaScript aus.
+führt das JavaScript aus.
 
 ## Warum kein React/Vite in Version 1?
 
-React/Vite waere technisch gut moeglich, braucht aber lokal oder in GitHub Actions einen
-Build-Schritt. Fuer den ersten Prototypen ist eine statische App ohne Build-Schritt
+React/Vite wäre technisch gut möglich, braucht aber lokal oder in GitHub Actions einen
+Build-Schritt. Für den ersten Prototypen ist eine statische App ohne Build-Schritt
 praktischer:
 
 - direkt testbar
 - weniger Einrichtung
 - kompatibel mit GitHub Pages und Netcup
-- keine Abhaengigkeiten
+- keine Abhängigkeiten
 - keine Node-Laufzeit im Hosting
 
-Falls die App groesser wird, kann sie spaeter immer noch auf Vite/React migriert werden.
-
+Falls die App größer wird, kann sie später immer noch auf Vite/React migriert werden.
