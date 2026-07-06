@@ -55,6 +55,9 @@ Die Datei kann direkt im Browser geöffnet werden. Dort lassen sich beliebig vie
 Fragen und Antworten anlegen und als Datei herunterladen. Die exportierte Datei
 enthält ein Array im gleichen Grundformat wie der interne Fragenkatalog:
 
+Die Haupt-App verlinkt dieses Tool nur als separaten Vorschlagsweg. Eine automatische
+Übernahme in den laufenden Fragenkatalog ist nicht vorgesehen.
+
 ```js
 {
   text: "Situationsbeschreibung",
