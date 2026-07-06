@@ -40,7 +40,6 @@ function renderIntro() {
       <div class="hero-actions">
         <button class="primary-button" data-action="start">Test starten</button>
         <span class="meta-note">12 Items · 3 Ausprägungen · 1 Ergebnisprofil</span>
-        <a class="tool-link" href="fragen-tool.html">Fragen vorschlagen</a>
       </div>
     </section>
     <section class="method-strip">
