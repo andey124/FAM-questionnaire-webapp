@@ -12,7 +12,8 @@ Webhosting veröffentlicht werden.
 Am einfachsten:
 
 1. `index.html` im Browser öffnen.
-2. Test ausfüllen.
+2. Test ausfüllen. Pro Durchlauf werden 12 aktive Fragen zufällig aus dem Pool gewählt;
+   auch die Antworten erscheinen in zufälliger Reihenfolge.
 3. Ergebnis im 2D-Dreieck ansehen. Nur bei überschrittener Schwelle erscheint eine zusätzliche 3D-Auswertung.
 
 Falls ein lokaler Webserver gewünscht ist:
@@ -37,6 +38,9 @@ Jede Antwort hat Scores für:
 { fotzig: 0, atzig: 0, mausig: 0, cringe: 0 }
 ```
 
+Fragen und Antworten haben stabile IDs. Mit `active: false` bleibt eine Frage im
+Katalog, wird aber nicht zufällig ausgespielt.
+
 Die Auswertung, Schwellenlogik und Ergebnistexte liegen in:
 
 ```txt
@@ -60,9 +64,12 @@ Die Haupt-App verlinkt dieses Tool nur als separaten Vorschlagsweg. Eine automat
 
 ```js
 {
+  id: "stabile-frage-id",
+  active: true,
   text: "Situationsbeschreibung",
   answers: [
     {
+      id: "stabile-antwort-id",
       text: "Antworttext",
       scores: { fotzig: 0, atzig: 0, mausig: 0, cringe: 0 }
     }
@@ -71,6 +78,16 @@ Die Haupt-App verlinkt dieses Tool nur als separaten Vorschlagsweg. Eine automat
 ```
 
 Die aktuelle Schwelle liegt bei 20 Prozent. Werte darunter werden proportional auf Fotzig, Atzig und Mausig umgelegt, sodass die sichtbaren Werte immer 100 Prozent ergeben.
+
+## Feedback und Datenschutz
+
+Pro Frage kann lokal markiert werden, ob das Item passend oder schwach wirkte. Diese
+Rückmeldungen werden ausschließlich im `localStorage` des Browsers gespeichert und
+nicht übertragen. Die App speichert keine IP-Adresse, nutzt keine Analytics und hat
+keine zentrale Hall of Fame.
+
+Ein optionales Pseudonym nach der Auswertung dient nur dazu, lokal einen teilbaren
+Ergebnissatz zu erzeugen. Es wird nicht automatisch gespeichert oder veröffentlicht.
 
 ## Kodierung
 
@@ -82,3 +99,4 @@ Fragen und Dokumentation stehen.
 - [Spezifikation](docs/specifikation.md)
 - [Umsetzungsplan](docs/umsetzungsplan.md)
 - [Hosting](docs/hosting.md)
+- [Datenschutzhinweis](datenschutz.html)

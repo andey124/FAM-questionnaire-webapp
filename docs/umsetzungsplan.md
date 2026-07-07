@@ -15,6 +15,8 @@ Status: umgesetzt.
 - Fragen lesen und Ton prüfen.
 - Antwortoptionen schärfen.
 - Scores nachjustieren.
+- Lokales Itemfeedback beobachten: Fragen mit mindestens 10 Rückmeldungen und
+  negativer Quote ab 40 Prozent redaktionell prüfen.
 - Ergebnisformulierungen erweitern.
 - Schwellenlogik testen: unterhalb verborgen, ab Schwelle sichtbar.
 
@@ -44,7 +46,9 @@ veröffentlicht werden.
 ## Mögliche Erweiterungen
 
 - Ergebnis als Bild exportieren.
-- Share-Text generieren.
+- Zentral auswertbares Feedback nur mit Backend, Datenschutzerklärung und klarem
+  Opt-in-Konzept.
+- Öffentliche Hall of Fame nur mit freiwilligem Pseudonym und Löschmöglichkeit.
 - Mehr Ergebnisprofile statt nur dynamischer Satz.
 - Optionaler Debug-Modus für Score-Anzeige pro Antwort.
 - Fragebogen als JSON auslagern, damit Nicht-Code-Editing leichter wird.

@@ -34,6 +34,7 @@ Vorgehen:
 
 ```txt
 index.html
+datenschutz.html
 src/
 docs/ optional
 README.md optional
@@ -43,6 +44,16 @@ README.md optional
 
 Wichtig: Auf dem Server muss nichts installiert werden. Der Browser der Besucher:innen
 führt das JavaScript aus.
+
+## Datenschutz beim statischen Hosting
+
+Die App selbst sendet kein Feedback, keine Namen und keine Ergebnisse an einen Server.
+Optionales Itemfeedback wird nur im lokalen Speicher des Browsers abgelegt.
+
+Der jeweilige Hosting-Anbieter kann trotzdem technische Zugriffsdaten verarbeiten,
+zum Beispiel IP-Adresse und Abrufzeitpunkt zur Auslieferung und Absicherung der
+Website. Bei GitHub Pages sollte darauf im verlinkten `datenschutz.html` hingewiesen
+werden.
 
 ## Warum kein React/Vite in Version 1?
 

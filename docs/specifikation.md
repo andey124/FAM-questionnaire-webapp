@@ -14,11 +14,13 @@ dreidimensional und die zusätzliche Dimension sichtbar.
 
 ## Zielgruppe und Nutzung
 
-- Nutzer:innen beantworten 12 Situationen.
+- Nutzer:innen beantworten 12 zufällig aus dem aktiven Fragenpool gewählte Situationen.
 - Pro Situation wird genau eine Antwort gewählt.
 - Nach Abschluss erscheint ein Ergebnis mit Prozentwerten, Visualisierung und einem
   Ergebnissatz.
-- Es gibt vorerst keine Speicherung, kein Teilen und kein Tracking.
+- Es gibt vorerst keine zentrale Speicherung, kein Tracking und keine öffentliche Hall of
+  Fame.
+- Optionales Itemfeedback und ein optionales Pseudonym bleiben lokal im Browser.
 
 ## Dimensionen
 
@@ -45,8 +47,18 @@ Anwendung darf sie erst ab Überschreiten der Schwelle genannt werden.
 Jede Antwort trägt Punkte auf vier Dimensionen:
 
 ```js
-{ fotzig: 0, atzig: 0, mausig: 0, cringe: 0 }
+{
+  id: "stabile-antwort-id",
+  text: "Antworttext",
+  scores: { fotzig: 0, atzig: 0, mausig: 0, cringe: 0 }
+}
 ```
+
+Jede Frage hat zusätzlich eine stabile `id`. Mit `active: false` kann eine Frage im
+Katalog bleiben, aber aus der zufälligen Ausspielung ausgeschlossen werden. Die App
+mischt pro Durchlauf zuerst die aktiven Fragen und danach die Antworten jeder
+ausgespielten Frage. Die Auswertung nutzt die stabilen Antwort-IDs, nicht die
+angezeigte Position.
 
 Unterhalb der Schwelle werden Cringe-Anteile proportional auf Fotzig, Atzig und
 Mausig umgelegt. Die sichtbaren Werte bestehen dann nur aus diesen drei Dimensionen
@@ -73,6 +85,7 @@ Das Ergebnis besteht aus:
 - Prozentwerte für drei oder vier Dimensionen, abhängig von der Schwelle
 - Visualisierung
 - einem Ergebnissatz
+- einem optionalen lokal erzeugten Share-Text mit Pseudonym
 
 Beispiele:
 
@@ -83,6 +96,25 @@ Fotzig-Mausig im flachen Modell
 ```txt
 Atzig-Fotzig mit latenter Cringe-Aktivierung
 ```
+
+## Fragenfeedback
+
+Pro Frage kann optional markiert werden, ob das Item passend oder schwach wirkte. Diese
+Rückmeldung wird nur lokal im Browser gespeichert:
+
+```js
+{
+  shown: 0,
+  positive: 0,
+  negative: 0,
+  lastRating: "positive",
+  lastRatedAt: "ISO-Zeitpunkt"
+}
+```
+
+Eine Frage gilt lokal als Prüfkandidat, wenn mindestens 10 Rückmeldungen vorliegen und
+die negative Quote mindestens 40 Prozent beträgt. Diese Metrik ist keine automatische
+Löschung, sondern ein Hinweis für die spätere redaktionelle Prüfung des Fragenpools.
 
 ## Visualisierung
 
@@ -115,5 +147,8 @@ gezeichnet.
 - Eine Frage pro Screen.
 - Kein Backend.
 - Kein Build-Schritt.
-- Kein Teilen/Speichern.
+- Kein zentrales Teilen/Speichern.
+- Kein IP-Tracking und keine zentrale Nutzerstatistik.
+- Lokales Itemfeedback über `localStorage` zur späteren Fragenprüfung.
+- Share-Text nur lokal generieren, nicht automatisch veröffentlichen.
 - Fragenkatalog direkt im Code editierbar.

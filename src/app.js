@@ -5,6 +5,10 @@ import {
 } from "./scoring.js";
 
 const app = document.querySelector("#app");
+const QUESTION_COUNT = 12;
+const FEEDBACK_STORAGE_KEY = "fam-question-feedback-v1";
+const FEEDBACK_MINIMUM_COUNT = 10;
+const FEEDBACK_NEGATIVE_LIMIT = 0.4;
 
 const poleColors = {
   fotzig: "#f7bac8",
@@ -16,7 +20,12 @@ const poleColors = {
 const state = {
   screen: "intro",
   currentQuestion: 0,
-  selectedAnswers: Array.from({ length: questions.length }, () => null),
+  sessionQuestions: [],
+  selectedAnswers: {},
+  sessionFeedback: {},
+  questionFeedback: loadQuestionFeedback(),
+  nickname: "",
+  shareText: "",
   rotation: { x: -0.52, y: 0.72 },
   animationFrame: null,
 };
@@ -26,6 +35,144 @@ function render() {
   if (state.screen === "intro") renderIntro();
   if (state.screen === "question") renderQuestion();
   if (state.screen === "result") renderResult();
+}
+
+function startQuestionnaire() {
+  const activeQuestions = questions.filter((question) => question.active !== false);
+  const selectedQuestions = shuffle(activeQuestions).slice(
+    0,
+    Math.min(QUESTION_COUNT, activeQuestions.length),
+  );
+
+  state.screen = "question";
+  state.currentQuestion = 0;
+  state.selectedAnswers = {};
+  state.sessionFeedback = {};
+  state.nickname = "";
+  state.shareText = "";
+  state.sessionQuestions = selectedQuestions.map((question, questionIndex) => {
+    const questionId = question.id ?? `frage-${questionIndex + 1}`;
+    return {
+      ...question,
+      id: questionId,
+      answers: shuffle(
+        question.answers.map((answer, answerIndex) => ({
+          ...answer,
+          id: answer.id ?? `${questionId}-antwort-${answerIndex + 1}`,
+        })),
+      ),
+    };
+  });
+
+  state.sessionQuestions.forEach((question) => recordQuestionShown(question.id));
+  persistQuestionFeedback();
+  render();
+}
+
+function shuffle(items) {
+  const shuffled = [...items];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}
+
+function recordQuestionShown(questionId) {
+  const entry = feedbackEntry(questionId);
+  entry.shown += 1;
+}
+
+function rateQuestion(questionId, rating) {
+  const previousRating = state.sessionFeedback[questionId];
+  if (previousRating === rating) return;
+
+  const entry = feedbackEntry(questionId);
+  if (previousRating) entry[previousRating] = Math.max(0, entry[previousRating] - 1);
+
+  entry[rating] += 1;
+  entry.lastRating = rating;
+  entry.lastRatedAt = new Date().toISOString();
+  state.sessionFeedback[questionId] = rating;
+  persistQuestionFeedback();
+}
+
+function feedbackEntry(questionId) {
+  if (!state.questionFeedback[questionId]) {
+    state.questionFeedback[questionId] = {
+      shown: 0,
+      positive: 0,
+      negative: 0,
+      lastRating: null,
+      lastRatedAt: null,
+    };
+  }
+
+  state.questionFeedback[questionId].shown =
+    Number(state.questionFeedback[questionId].shown) || 0;
+  state.questionFeedback[questionId].positive =
+    Number(state.questionFeedback[questionId].positive) || 0;
+  state.questionFeedback[questionId].negative =
+    Number(state.questionFeedback[questionId].negative) || 0;
+
+  return state.questionFeedback[questionId];
+}
+
+function loadQuestionFeedback() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(FEEDBACK_STORAGE_KEY));
+    return stored && typeof stored === "object" && !Array.isArray(stored) ? stored : {};
+  } catch {
+    return {};
+  }
+}
+
+function persistQuestionFeedback() {
+  try {
+    localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(state.questionFeedback));
+  } catch {
+    // Lokales Feedback ist optional; die Auswertung muss ohne Speicherzugriff weiterlaufen.
+  }
+}
+
+function feedbackSummary(questionId) {
+  const entry = state.questionFeedback[questionId];
+  if (!entry) return "";
+
+  const rated = entry.positive + entry.negative;
+  if (rated === 0) return "";
+
+  const negativeShare = entry.negative / rated;
+  const status =
+    rated < FEEDBACK_MINIMUM_COUNT
+      ? `Kalibrierung: ${rated}/${FEEDBACK_MINIMUM_COUNT} lokale Rückmeldungen.`
+      : negativeShare >= FEEDBACK_NEGATIVE_LIMIT
+        ? "Lokaler Prüfkandidat für den Fragenpool."
+        : "Lokale Rückmeldungen unauffällig.";
+
+  return `<span class="feedback-summary">${status}</span>`;
+}
+
+function createShareText(result) {
+  const name = state.nickname.trim();
+  const subject = name || "Mein Ergebnis";
+
+  return `${subject} ist: ${result.title}. ${result.sentence}`;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function escapeAttribute(value) {
+  return escapeHtml(value).replaceAll("`", "&#096;");
 }
 
 function renderIntro() {
@@ -39,7 +186,8 @@ function renderIntro() {
       </p>
       <div class="hero-actions">
         <button class="primary-button" data-action="start">Test starten</button>
-        <span class="meta-note">12 Items · 3 Ausprägungen · 1 Ergebnisprofil</span>
+        <span class="meta-note">12 Items aus dem Pool · 3 Ausprägungen · 1 Ergebnisprofil</span>
+        <a class="tool-link" href="datenschutz.html">Datenschutzhinweis</a>
       </div>
     </section>
     <section class="method-strip">
@@ -59,41 +207,64 @@ function renderIntro() {
   `;
 
   app.querySelector("[data-action='start']").addEventListener("click", () => {
-    state.screen = "question";
-    render();
+    startQuestionnaire();
   });
 }
 
 function renderQuestion() {
-  const question = questions[state.currentQuestion];
-  const selected = state.selectedAnswers[state.currentQuestion];
-  const progress = ((state.currentQuestion + 1) / questions.length) * 100;
+  if (state.sessionQuestions.length === 0) {
+    startQuestionnaire();
+    return;
+  }
+
+  const question = state.sessionQuestions[state.currentQuestion];
+  const selected = state.selectedAnswers[question.id] ?? null;
+  const questionTotal = state.sessionQuestions.length;
+  const progress = ((state.currentQuestion + 1) / questionTotal) * 100;
 
   app.innerHTML = `
     <section class="question-layout">
       <div class="question-head">
-        <p class="eyebrow">Item ${state.currentQuestion + 1} von ${questions.length}</p>
+        <p class="eyebrow">Item ${state.currentQuestion + 1} von ${questionTotal}</p>
         <div class="progress-track" aria-label="Fortschritt">
           <span style="width: ${progress}%"></span>
         </div>
-        <h2>${question.text}</h2>
+        <h2>${escapeHtml(question.text)}</h2>
       </div>
       <div class="answer-grid">
         ${question.answers
           .map(
             (answer, index) => `
-              <button class="answer-card ${selected === index ? "is-selected" : ""}" data-answer="${index}">
+              <button class="answer-card ${selected === answer.id ? "is-selected" : ""}" data-answer="${escapeAttribute(answer.id)}">
                 <span>${String.fromCharCode(65 + index)}</span>
-                ${answer.text}
+                ${escapeHtml(answer.text)}
               </button>
             `,
           )
           .join("")}
       </div>
+      <div class="question-feedback" aria-label="Itemfeedback">
+        <span>Itemfeedback</span>
+        <button
+          class="feedback-button ${state.sessionFeedback[question.id] === "positive" ? "is-selected" : ""}"
+          data-feedback="positive"
+          aria-pressed="${state.sessionFeedback[question.id] === "positive"}"
+        >
+          Wirkt passend
+        </button>
+        <button
+          class="feedback-button ${state.sessionFeedback[question.id] === "negative" ? "is-selected" : ""}"
+          data-feedback="negative"
+          aria-pressed="${state.sessionFeedback[question.id] === "negative"}"
+        >
+          Wirkt schwach
+        </button>
+        ${feedbackSummary(question.id)}
+      </div>
       <div class="nav-row">
         <button class="ghost-button" data-action="back" ${state.currentQuestion === 0 ? "disabled" : ""}>Zurück</button>
         <button class="primary-button" data-action="next" ${selected === null ? "disabled" : ""}>
-          ${state.currentQuestion === questions.length - 1 ? "Auswerten" : "Weiter"}
+          ${state.currentQuestion === questionTotal - 1 ? "Auswerten" : "Weiter"}
         </button>
       </div>
     </section>
@@ -101,7 +272,15 @@ function renderQuestion() {
 
   app.querySelectorAll("[data-answer]").forEach((button) => {
     button.addEventListener("click", () => {
-      state.selectedAnswers[state.currentQuestion] = Number(button.dataset.answer);
+      state.selectedAnswers[question.id] = button.dataset.answer;
+      state.shareText = "";
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-feedback]").forEach((button) => {
+    button.addEventListener("click", () => {
+      rateQuestion(question.id, button.dataset.feedback);
       render();
     });
   });
@@ -112,7 +291,7 @@ function renderQuestion() {
   });
 
   app.querySelector("[data-action='next']").addEventListener("click", () => {
-    if (state.currentQuestion === questions.length - 1) {
+    if (state.currentQuestion === questionTotal - 1) {
       state.screen = "result";
     } else {
       state.currentQuestion += 1;
@@ -122,9 +301,10 @@ function renderQuestion() {
 }
 
 function renderResult() {
-  const answers = state.selectedAnswers.map((answerIndex, questionIndex) => {
-    if (answerIndex === null) return null;
-    return questions[questionIndex].answers[answerIndex];
+  const answers = state.sessionQuestions.map((question) => {
+    const answerId = state.selectedAnswers[question.id];
+    if (!answerId) return null;
+    return question.answers.find((answer) => answer.id === answerId) ?? null;
   });
   const result = calculateResult(answers);
 
@@ -144,9 +324,30 @@ function renderResult() {
           <button class="ghost-button" data-action="restart">Neu kalibrieren</button>
           <button class="primary-button" data-action="revise">Antworten prüfen</button>
         </div>
+        <div class="share-panel">
+          <label for="nickname">Optionales Pseudonym für den lokalen Ergebnissatz</label>
+          <div class="share-row">
+            <input
+              id="nickname"
+              type="text"
+              maxlength="40"
+              autocomplete="off"
+              data-field="nickname"
+              value="${escapeAttribute(state.nickname)}"
+              placeholder="Name oder Pseudonym"
+            />
+            <button class="ghost-button" data-action="share-text">Text erzeugen</button>
+          </div>
+          ${
+            state.shareText
+              ? `<output class="share-output">${escapeHtml(state.shareText)}</output>`
+              : '<p class="privacy-note">Das Pseudonym bleibt lokal im Browser und wird nicht gespeichert oder übertragen.</p>'
+          }
+        </div>
       </div>
       <div class="visual-panel">
         ${result.isCringeRelevant ? pyramidTemplate() : triangleTemplate(result)}
+        <p class="visual-result-sentence">${escapeHtml(result.sentence)}</p>
         ${
           result.isCringeRelevant
             ? '<p class="visual-caption">Cringe ist modellrelevant. Ziehen Sie die Pyramide mit der Maus oder dem Finger.</p>'
@@ -159,13 +360,26 @@ function renderResult() {
   app.querySelector("[data-action='restart']").addEventListener("click", () => {
     state.screen = "intro";
     state.currentQuestion = 0;
-    state.selectedAnswers = Array.from({ length: questions.length }, () => null);
+    state.sessionQuestions = [];
+    state.selectedAnswers = {};
+    state.sessionFeedback = {};
+    state.nickname = "";
+    state.shareText = "";
     render();
   });
 
   app.querySelector("[data-action='revise']").addEventListener("click", () => {
     state.screen = "question";
     state.currentQuestion = 0;
+    render();
+  });
+
+  app.querySelector("[data-field='nickname']").addEventListener("input", (event) => {
+    state.nickname = event.target.value;
+  });
+
+  app.querySelector("[data-action='share-text']").addEventListener("click", () => {
+    state.shareText = createShareText(result);
     render();
   });
 

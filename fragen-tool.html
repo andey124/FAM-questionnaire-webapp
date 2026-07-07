@@ -452,6 +452,7 @@
 
       function createQuestion() {
         return {
+          active: true,
           text: "",
           answers: [
             answer("", 3, 0, 0, 0),
@@ -566,15 +567,36 @@
       }
 
       function createExport() {
-        return state.questions.map((question) => ({
+        return state.questions.map((question, questionIndex) => {
+          const questionId = createId(question.text, `frage-${questionIndex + 1}`);
+
+          return {
+            id: questionId,
+            active: true,
             text: question.text.trim(),
-            answers: question.answers.map((item) => ({
+            answers: question.answers.map((item, answerIndex) => ({
+              id: `${questionId}-${createId(item.text, `antwort-${answerIndex + 1}`)}`,
               text: item.text.trim(),
               scores: Object.fromEntries(
                 dimensions.map((dimension) => [dimension, numberScore(item.scores[dimension])]),
               ),
             })),
-          }));
+          };
+        });
+      }
+
+      function createId(value, fallback) {
+        const normalized = value
+          .trim()
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/ß/g, "ss")
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "")
+          .slice(0, 48);
+
+        return normalized || fallback;
       }
 
       function validate() {
