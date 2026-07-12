@@ -2,6 +2,7 @@ import { questions } from "./questions.js";
 import {
   calculateResult,
   getPyramidPoint,
+  PYRAMID_VERTICES,
 } from "./scoring.js";
 
 const app = document.querySelector("#app");
@@ -474,27 +475,14 @@ function mountPyramid(result) {
   let isDragging = false;
   let last = { x: 0, y: 0 };
 
-  const vertices = {
-    fotzig: { x: 0, y: 1.39, z: 0 },
-    atzig: { x: -1.2, y: -0.69, z: 0 },
-    mausig: { x: 1.2, y: -0.69, z: 0 },
-    cringe: { x: 0, y: 0, z: 1.95 },
-  };
+  const centroid = { x: 0, y: 0.0025, z: 0.4875 };
 
   function draw() {
     if (!svg.isConnected) return;
-    let projected = Object.fromEntries(
-      Object.entries(vertices).map(([key, value]) => [key, project(value)]),
+    const projected = Object.fromEntries(
+      Object.entries(PYRAMID_VERTICES).map(([key, value]) => [key, project(value)]),
     );
-    let dot = project(resultPoint);
-    const fitted = fitProjection({ ...projected, dot });
-    dot = fitted.dot;
-    projected = {
-      fotzig: fitted.fotzig,
-      atzig: fitted.atzig,
-      mausig: fitted.mausig,
-      cringe: fitted.cringe,
-    };
+    const dot = project(resultPoint);
     const faces = [
       ["fotzig", "atzig", "mausig", "rgba(255,255,255,0.54)", "base"],
       ["fotzig", "atzig", "cringe", "rgba(247, 186, 200, 0.66)", "fotzig"],
@@ -524,45 +512,23 @@ function mountPyramid(result) {
   }
 
   function project(point) {
+    const px = point.x - centroid.x;
+    const py = point.y - centroid.y;
+    const pz = point.z - centroid.z;
     const cosY = Math.cos(state.rotation.y);
     const sinY = Math.sin(state.rotation.y);
     const cosX = Math.cos(state.rotation.x);
     const sinX = Math.sin(state.rotation.x);
-    const x1 = point.x * cosY - point.z * sinY;
-    const z1 = point.x * sinY + point.z * cosY;
-    const y1 = point.y * cosX - z1 * sinX;
-    const z2 = point.y * sinX + z1 * cosX;
-    const scale = 900 / (4.4 - z2);
+    const x1 = px * cosY - pz * sinY;
+    const z1 = px * sinY + pz * cosY;
+    const y1 = py * cosX - z1 * sinX;
+    const z2 = py * sinX + z1 * cosX;
+    const scale = 950 / (7 - z2);
 
     return {
       x: 280 + x1 * scale,
-      y: 276 - y1 * scale,
+      y: 260 - y1 * scale,
     };
-  }
-
-  function fitProjection(pointsMap) {
-    const values = Object.values(pointsMap);
-    const minX = Math.min(...values.map((point) => point.x));
-    const maxX = Math.max(...values.map((point) => point.x));
-    const minY = Math.min(...values.map((point) => point.y));
-    const maxY = Math.max(...values.map((point) => point.y));
-    const width = maxX - minX || 1;
-    const height = maxY - minY || 1;
-    const fit = Math.min(1, 470 / width, 430 / height);
-    const center = {
-      x: (minX + maxX) / 2,
-      y: (minY + maxY) / 2,
-    };
-
-    return Object.fromEntries(
-      Object.entries(pointsMap).map(([key, point]) => [
-        key,
-        {
-          x: 280 + (point.x - center.x) * fit,
-          y: 256 + (point.y - center.y) * fit,
-        },
-      ]),
-    );
   }
 
   svg.addEventListener("pointerdown", (event) => {

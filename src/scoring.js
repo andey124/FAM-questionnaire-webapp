@@ -63,13 +63,15 @@ export function barycentricToTriangle(base) {
   };
 }
 
+export const PYRAMID_VERTICES = {
+  fotzig: { x: 0, y: 1.39, z: 0 },
+  atzig: { x: -1.2, y: -0.69, z: 0 },
+  mausig: { x: 1.2, y: -0.69, z: 0 },
+  cringe: { x: 0, y: 0, z: 1.95 },
+};
+
 export function getPyramidPoint(result) {
-  const vertices = {
-    fotzig: { x: 0, y: 1.39, z: 0 },
-    atzig: { x: -1.2, y: -0.69, z: 0 },
-    mausig: { x: 1.2, y: -0.69, z: 0 },
-    cringe: { x: 0, y: 0, z: 1.95 },
-  };
+  const vertices = PYRAMID_VERTICES;
   const cringeShare = result.isCringeRelevant
     ? (result.percentages.cringe ?? 0) / 100
     : 0;
