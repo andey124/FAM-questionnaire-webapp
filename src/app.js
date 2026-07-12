@@ -28,6 +28,7 @@ const state = {
   nickname: "",
   shareText: "",
   rotation: { x: -0.52, y: 0.72 },
+  autoRotate: true,
   animationFrame: null,
 };
 
@@ -465,6 +466,9 @@ function pyramidTemplate() {
     <svg class="pyramid-visual" viewBox="0 0 560 520" role="img" aria-label="FAM-Pyramide">
       <g data-pyramid></g>
     </svg>
+    <button class="ghost-button" data-action="toggle-rotation" aria-pressed="${state.autoRotate}">
+      ${state.autoRotate ? "Rotation anhalten" : "Rotation fortsetzen"}
+    </button>
   `;
 }
 
@@ -556,12 +560,19 @@ function mountPyramid(result) {
     isDragging = false;
   });
 
+  const rotateToggle = app.querySelector("[data-action='toggle-rotation']");
+  rotateToggle.addEventListener("click", () => {
+    state.autoRotate = !state.autoRotate;
+    rotateToggle.textContent = state.autoRotate ? "Rotation anhalten" : "Rotation fortsetzen";
+    rotateToggle.setAttribute("aria-pressed", state.autoRotate);
+  });
+
   function animate() {
     if (!svg.isConnected) {
       stopPyramidAnimation();
       return;
     }
-    if (!isDragging) {
+    if (!isDragging && state.autoRotate) {
       state.rotation.y += 0.006;
       draw();
     }
